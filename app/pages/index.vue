@@ -1,13 +1,13 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'home',
+  layout: 'default',
 })
 
 const online = useOnline()
 </script>
 
 <template>
-  <div>
+  <q-page padding>
     <Logos mb-6 />
     <ClientOnly>
       <Suspense>
@@ -27,6 +27,8 @@ const online = useOnline()
         </div>
       </template>
     </ClientOnly>
-    <InputEntry />
-  </div>
+    <NuxtLink class="q-mt-xl text-h3 block" title="Quran" to="/quran/1">Quran</NuxtLink>
+    <NuxtLink class="q-mt-xl text-h3 block" title="HolyNames" to="/holynames">HolyNames</NuxtLink>
+
+  </q-page>
 </template>

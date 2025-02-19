@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@nuxt/eslint',
+    'nuxt-quasar-ui',
   ],
 
   devtools: {
@@ -22,6 +23,7 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
         { rel: 'icon', type: 'image/svg+xml', href: '/nuxt.svg' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'stylesheet', href:'https://cdn.jsdelivr.net/npm/quasar@2.17.7/dist/quasar.prod.css'}
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -48,7 +50,7 @@ export default defineNuxtConfig({
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
     // but missing on offline, disabling extraction it until fixed
-    payloadExtraction: false,
+    payloadExtraction: true,
     renderJsonPayloads: true,
     typedPages: true,
   },
@@ -66,6 +68,27 @@ export default defineNuxtConfig({
       routes: ['/'],
       ignore: ['/hi'],
     },
+    imports: {
+      autoImport: true,
+      dirs: [
+        '../shared',
+        '../app/constants',
+        '../app/components'
+      ]
+    }
+    
+  },
+  imports: {
+    autoImport: true,
+    dirs: [
+      '../app/constants',
+      '../app/layouts',
+      '../app/store',
+      '../app/composables',
+      '../app/components',
+      '../shared',
+      '../server/uils'
+    ]
   },
 
   eslint: {
