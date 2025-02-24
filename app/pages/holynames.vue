@@ -11,7 +11,7 @@ const holynames: HolyNameI[] = $HolyNames as HolyNameI[]
 
 </script>
 <template>
-    <QPage padding class="holynames-page fit flex flex-wrap rtl">
+    <QPage padding class="holynames-page fit rtl">
         <Glory class="glory" v-for="one in holynames" :name="one
             .name" :text="one.text" :key="one.text">{{ one.name }}</Glory>
     </QPage>
@@ -21,10 +21,5 @@ const holynames: HolyNameI[] = $HolyNames as HolyNameI[]
 .glory {
     font: calc(4rem + 100vw);
 }
-.flex{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-sta
-}
+
 </style>

@@ -28,7 +28,7 @@ function toggleDrwer() {
       </q-toolbar>
     </q-header>
 
-    <q-drawer min-width="200" v-model="toggleLeftDrawer" elevated side="left" bordered>
+    <q-drawer min-width="150" mini v-model="toggleLeftDrawer" elevated side="left" bordered>
       <fahras />
     </q-drawer>
 

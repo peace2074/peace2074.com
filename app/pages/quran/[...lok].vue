@@ -45,11 +45,11 @@ const Verses = computed(() => sura.value.ayat)
         <div class="q-gutter-md" column mt-40>
             <q-card class="text-sm">
 
-                <q-card-section class=" q-mt-xl block pcs">
-                    <q-pagination class="ltr" v-model="lok" direction-links unelevated color="black" active-color="green" :max="114"
-                        h-2 />
+                <q-card-section class="block pcs hidden display-none">
+                    <q-pagination class="ltr hidden" v-model="lok" direction-links unelevated color="black" active-color="green" :max="114"
+                        h-1 />
                 </q-card-section>
-                <q-input v-model="lok" type="number" label="To Sura" />
+                <q-input v-model="lok" type="number" :max="114" :min="1" label="To Sura" />
 
                 <q-card-section class="rtl flex" mt-50>
                     <div>
@@ -69,7 +69,7 @@ const Verses = computed(() => sura.value.ayat)
                 <q-card-section>
                     <span class="capitalize block just fit verse">
                         <i class="q-mx-sm" v-for="aya in sura.ayat" :key="aya.verse">{{ aya.text }}
-                            <q-chip>{{ aya.verse }}</q-chip>
+                            <q-chip class="text-white bg-green">{{ aya.verse }}</q-chip>
                         </i>
                     </span>
                 </q-card-section>
