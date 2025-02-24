@@ -34,8 +34,8 @@ function toggleDrwer() {
 
     <q-page-container>
       <slot />
-      <q-page-scroller reverse position="bottom" :scroll-offset="20" :offset="[20, -9]">
-        <q-btn fab icon="keyboard_arrow_down" color="accent" />
+      <q-page-scroller  position="bottom" :scroll-offset="20" :offset="[0, 0]">
+        <q-btn fab icon="keyboard_arrow_up" color="green" />
       </q-page-scroller>
     </q-page-container>
 

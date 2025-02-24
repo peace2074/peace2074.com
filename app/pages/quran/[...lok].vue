@@ -56,8 +56,8 @@ const Verses = computed(() => sura.value.ayat)
                         <h5 class="text-h5"><span class="text-h6">رقم</span>:{{ sura.id }}</h5>
                     </div>
                     <div>
-                        <h4 class="capitalize text-h6">Number of Verses:{{ sura.total_verses }}</h4>
-                        <h4 class="capitalize text-h6">Locatiom:{{ sura.type }}</h4>
+                        <h4 class="capitalize align-left text-h6">Number of Verses:{{ sura.total_verses }}</h4>
+                        <h4 class="capitalize align-left text-h6">Location:{{ sura.type }}</h4>
                     </div>
                 </q-card-section>
             </q-card>
@@ -109,5 +109,11 @@ const Verses = computed(() => sura.value.ayat)
 
 .verse {
     font-size: 2rem;
+}
+.align-left{
+    text-align: left;
+}
+.align-right {
+    text-align: right;
 }
 </style>
