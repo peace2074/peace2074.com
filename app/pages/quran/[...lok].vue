@@ -28,10 +28,10 @@ watchEffect(() => {
     lok.value = +route.params?.lok as number && 1
 })
 
-watch(lok, (newv) => {
-    router.push(`/quran/${newv}`)
+// watch(lok, (newv:number) => {
+//     router.push(`/quran/${newv}`)
 
-})
+// })
 
 const Quran: QDBI = nuxtApp.payload.data.B6H5jvHlMH
 const sura: Ref<QDBI> = computed(() => Quran[lok.value - 1])
@@ -41,14 +41,15 @@ const Verses = computed(() => sura.value.ayat)
 // const cleanText = computed(() => Verses.value.replaceAll(',', ' ♦ '))
 </script>
 <template>
-    <q-page padding class=" rtl">
+    <q-page padding class="rtl">
         <div class="q-gutter-md" column mt-40>
             <q-card class="text-sm">
 
-                <q-card-section class=" q-mt-xl q-mb-xl flex flex-center">
-                    <q-pagination v-model="lok" direction-links unelevated color="black" active-color="green" :max="114"
-                        h-5 />
+                <q-card-section class=" q-mt-xl block pcs">
+                    <q-pagination class="ltr" v-model="lok" direction-links unelevated color="black" active-color="green" :max="114"
+                        h-2 />
                 </q-card-section>
+                <q-input v-model="lok" type="number" label="To Sura" />
 
                 <q-card-section class="rtl flex" mt-50>
                     <div>
@@ -89,12 +90,16 @@ const Verses = computed(() => sura.value.ayat)
 
 .rtl {
     direction: rtl;
+    margin-top: 5rem;
 }
 
 .ltr {
     direction: ltr;
 }
-
+.pcs{
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
 .flex {
     display: flex;
     flex-direction: row;

@@ -17,8 +17,14 @@ const holynames: HolyNameI[] = $HolyNames as HolyNameI[]
     </QPage>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .glory {
     font: calc(4rem + 100vw);
+}
+.flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-sta
 }
 </style>
