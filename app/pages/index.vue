@@ -18,6 +18,7 @@ const online = useOnline()
         <template #fallback>
           <div italic op50>
             <span animate-pulse>Loading...</span>
+            <q-skeleton animation="true" bordered />
           </div>
         </template>
       </Suspense>

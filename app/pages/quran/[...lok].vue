@@ -1,17 +1,22 @@
 <script lang="ts" async setup>
+import { VueScrollPicker } from 'vue-scroll-picker'
+import "vue-scroll-picker/style.css";
 import { useHead, useNuxtApp, useRoute } from '#imports';
 import type revQuranT from '../../../server/api/quran'
 import type { QDBI } from '../../../shared/types/index';
 const nuxtApp = useNuxtApp()
 const { $quran } = nuxtApp
-export type ONET = {
-    Index: number | string,
-    Name: string,
-    Location: string,
-    TotalVerses: number,
-    Verses: {
-
-    }
+export interface ONE_INTERFACE {
+    id: number,
+    name: string,
+    e_name: string,
+    type: string,
+    total: number,
+    ayat: {
+        chapter: number
+        verse: number
+        text: string[]
+    }[]
 }
 
 useHead({
@@ -21,35 +26,42 @@ useHead({
     ogDescription: appDescription,
 });
 const route = useRoute()
-const lok = ref(route.params?.lok)
+const lok: Ref<number> = ref(route.params?.lok)
 const router = useRouter()
 
 watchEffect(() => {
     lok.value = +route.params?.lok as number && 1
 })
 
-// watch(lok, (newv:number) => {
-//     router.push(`/quran/${newv}`)
+// watch(
+//     lok,
+//     (newValue: number, oldValue: number) => {
+//         if(!parseInt(oldValue)) {
+//             lok.value = newValue
+//         }
+//     }
+// );
 
-// })
-
-const Quran: QDBI = nuxtApp.payload.data.B6H5jvHlMH
-const sura: Ref<QDBI> = computed(() => Quran[lok.value - 1])
+const Quran: ONE_INTERFACE[] = nuxtApp.payload.data.B6H5jvHlMH
+const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
 const Verses = computed(() => sura.value.ayat)
-// const Infor = computed(() => sura.value)
+const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
+({
+    name: Single.name,
+    value: Single.id
+}))
 
-// const cleanText = computed(() => Verses.value.replaceAll(',', ' ♦ '))
 </script>
 <template>
     <q-page padding class="rtl">
         <div class="q-gutter-md" column>
             <q-card class="text-md">
 
-                <q-card-section class="block pcs hidden display-none">
-                    <q-pagination class="ltr hidden" v-model="lok" direction-links unelevated color="black" active-color="green" :max="114"
-                        h-1 />
+                <q-card-section class="block pcs">
+                    <VueScrollPicker :options="options" v-model="lok" />
+                    <q-input mini v-model="lok" type="number" :max="114" :min="1" label="Sura" />
+
                 </q-card-section>
-                <q-input mini v-model="lok" type="number" :max="114" :min="1" label="Sura" />
 
                 <q-card-section class="rtl flex">
                     <div>
@@ -95,10 +107,12 @@ const Verses = computed(() => sura.value.ayat)
 .ltr {
     direction: ltr;
 }
-.pcs{
+
+.pcs {
     overflow-x: scroll;
     overflow-y: hidden;
 }
+
 .flex {
     display: flex;
     flex-direction: row;
@@ -114,9 +128,11 @@ const Verses = computed(() => sura.value.ayat)
 .verse {
     font-size: 2rem;
 }
-.align-left{
+
+.align-left {
     text-align: left;
 }
+
 .align-right {
     text-align: right;
 }

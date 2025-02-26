@@ -163,6 +163,7 @@ type aya = {
     text: string
 }
 export interface QDBI {
+    [key: number]: any;
     id: number,
     name: string,
     e_name?: string,
