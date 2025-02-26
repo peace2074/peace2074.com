@@ -42,16 +42,16 @@ const Verses = computed(() => sura.value.ayat)
 </script>
 <template>
     <q-page padding class="rtl">
-        <div class="q-gutter-md" column mt-40>
-            <q-card class="text-sm">
+        <div class="q-gutter-md" column>
+            <q-card class="text-md">
 
                 <q-card-section class="block pcs hidden display-none">
                     <q-pagination class="ltr hidden" v-model="lok" direction-links unelevated color="black" active-color="green" :max="114"
                         h-1 />
                 </q-card-section>
-                <q-input v-model="lok" type="number" :max="114" :min="1" label="To Sura" />
+                <q-input mini v-model="lok" type="number" :max="114" :min="1" label="Sura" />
 
-                <q-card-section class="rtl flex" mt-50>
+                <q-card-section class="rtl flex">
                     <div>
                         <h4 class="text-h3"><span class="text-h6">اسم السورة</span>{{ sura.name }}</h4>
                         <h5 class="text-h5"><span class="text-h6">رقم</span>:{{ sura.id }}</h5>
@@ -90,7 +90,6 @@ const Verses = computed(() => sura.value.ayat)
 
 .rtl {
     direction: rtl;
-    margin-top: 5rem;
 }
 
 .ltr {

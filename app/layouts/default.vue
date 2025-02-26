@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const $q = useQuasar()
 const offset = ref([0, 18])
-const toggleLeftDrawer = ref(true)
+const toggleLeftDrawer = ref(false)
 
 const { toggle } = $q.dark
 function toggleDark() {

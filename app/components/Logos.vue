@@ -1,17 +1,16 @@
+<script lang="ts" setup>
+const imgSrc = ref("/nuxt.svg")
+</script>
 <template>
-  <div inline-flex cursor-default text-2xl font-300>
-    <div flex flex-col children:mx-auto>
-      <img inline-block h-18 w-18 src="/nuxt.svg">
-      <span mt--2 text-green5>Nuxt 3</span>
-    </div>
-    <div
-      text="3xl gray4"
-      m="x-4 y-auto"
-      i-carbon-add transform transition-all-500 hover:rotate-135
-    />
-    <div flex flex-col children:mx-auto>
-      <img inline-block h-18 w-18 src="/vite.png">
-      <span mt--2 text-purple5>Vitesse</span>
+  <div flex cursor-default text-3xl font-300>
+    <div flex class="q-mx-auto q-pa-md">
+      <q-img h-18 w-18 mx-auto class="q-mx-auto" :src="imgSrc" alt="Nuxt 4" />
+      <span mt--2 mx-auto text-green5 class=" text-h4 block q-mx-auto">Nuxt 4</span>
     </div>
   </div>
 </template>
+<style scoped>
+.mx-auto{
+  margin: 0 auto;
+}
+</style>
