@@ -6,17 +6,19 @@ import type revQuranT from '../../../server/api/quran'
 import type { QDBI } from '../../../shared/types/index';
 const nuxtApp = useNuxtApp()
 const { $quran } = nuxtApp
+type AYAT = {
+    chapter: number,
+    verse: number
+    text: string[]
+}
 export interface ONE_INTERFACE {
+    [k: string]: number | string | AYAT[]
     id: number,
     name: string,
     e_name: string,
     type: string,
     total: number,
-    ayat: {
-        chapter: number
-        verse: number
-        text: string[]
-    }[]
+    ayat: AYAT[]
 }
 
 useHead({
@@ -26,22 +28,9 @@ useHead({
     ogDescription: appDescription,
 });
 const route = useRoute()
-const lok: Ref<number> = ref(route.params?.lok)
+const routeParamms = computed(()=>route.params)
+const lok: Ref<number> = ref(routeParamms.value.lok || 1)
 const router = useRouter()
-
-watchEffect(() => {
-    lok.value = +route.params?.lok as number && 1
-})
-
-// watch(
-//     lok,
-//     (newValue: number, oldValue: number) => {
-//         if(!parseInt(oldValue)) {
-//             lok.value = newValue
-//         }
-//     }
-// );
-
 const Quran: ONE_INTERFACE[] = nuxtApp.payload.data.B6H5jvHlMH
 const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
 const Verses = computed(() => sura.value.ayat)
@@ -50,6 +39,9 @@ const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
     name: Single.name,
     value: Single.id
 }))
+watchEffect(() => {
+    lok.value = +routeParamms.value.lok && 1
+})
 
 </script>
 <template>
