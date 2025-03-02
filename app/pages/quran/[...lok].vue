@@ -1,8 +1,8 @@
 <script lang="ts" async setup>
 import { VueScrollPicker } from 'vue-scroll-picker'
 import "vue-scroll-picker/style.css";
-import { useHead, useNuxtApp, useRoute } from '#imports';
-import type revQuranT from '../../../server/api/quran'
+import { useHead, useNuxtApp, useRoute,watch } from '#imports';
+import revQuranT from '../../../server/api/quran'
 import type { QDBI } from '../../../shared/types/index';
 const nuxtApp = useNuxtApp()
 const { $quran } = nuxtApp
@@ -28,8 +28,8 @@ useHead({
     ogDescription: appDescription,
 });
 const route = useRoute()
-const routeParamms = computed(()=>route.params)
-const lok: Ref<number> = ref(routeParamms.value.lok || 1)
+const routeParams = computed(()=>route.params)
+let lok: Ref<number> = ref(1)
 const router = useRouter()
 const Quran: ONE_INTERFACE[] = nuxtApp.payload.data.B6H5jvHlMH
 const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
@@ -40,9 +40,21 @@ const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
     value: Single.id
 }))
 watchEffect(() => {
-    lok.value = +routeParamms.value.lok && 1
+    lok.value = routeParams.value.lok
 })
-
+const bookmarks = ref([])
+const saveBookmark = (bm:number) => {
+    bookmarks.value.push(lok.value+':'+bm)
+}
+// watch(
+//     route.params,
+//     (current: number, previous: number) => {
+//         if (['lok']) {
+//             lok.value = routeParams.value.lok
+//         }
+//         lok.value = current.lok
+//     }
+// )
 </script>
 <template>
     <q-page padding class="rtl">
@@ -51,7 +63,7 @@ watchEffect(() => {
 
                 <q-card-section class="block pcs">
                     <VueScrollPicker :options="options" v-model="lok" />
-                    <q-input mini v-model="lok" type="number" :max="114" :min="1" label="Sura" />
+                    <q-input fab mini v-model="lok" type="number" :max="114" :min="1" label="Sura" />
 
                 </q-card-section>
 
@@ -65,6 +77,12 @@ watchEffect(() => {
                         <h4 class="capitalize align-left text-h6">Location:{{ sura.type }}</h4>
                     </div>
                 </q-card-section>
+                <q-card-section>
+                    bookmarks
+                    <ol>
+                        <li v-for="b in bookmarks" :key="b">{{ b }}</li>
+                    </ol>
+                </q-card-section>
             </q-card>
             <q-card class="q-mt-xs">
                 <q-card-section>
@@ -74,6 +92,7 @@ watchEffect(() => {
                     <span class="capitalize block just fit verse">
                         <i class="q-mx-sm" v-for="aya in sura.ayat" :key="aya.verse">{{ aya.text }}
                             <q-chip class="text-white bg-green">{{ aya.verse }}</q-chip>
+                            <q-btn dense color="primary" icon="check" label="Bookmark" @click="saveBookmark(aya.verse)" />
                         </i>
                     </span>
                 </q-card-section>
