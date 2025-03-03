@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { useNuxtApp } from 'nuxt/app';
-
 const nuxtApp = useNuxtApp()
 interface HolyNameI {
     name: string,

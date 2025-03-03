@@ -29,8 +29,16 @@ useHead({
 });
 const route = useRoute()
 const routeParams = computed(()=>route.params)
-let lok: Ref<number> = ref(1)
-const router = useRouter()
+let lok: Ref<number> = ref(route.params.lok || 1)
+const bookmarks:Ref<string[]> = ref([])
+const anchor = ref('')
+const router = useRouter({
+    scrollBehavior(to: any, from: string) {
+        if (to.hash) {
+            return { el: to.hash }
+        }
+    },
+})
 const Quran: ONE_INTERFACE[] = nuxtApp.payload.data.B6H5jvHlMH
 const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
 const Verses = computed(() => sura.value.ayat)
@@ -40,21 +48,20 @@ const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
     value: Single.id
 }))
 watchEffect(() => {
-    lok.value = routeParams.value.lok
+    lok.value = route.params.lok
 })
-const bookmarks = ref([])
 const saveBookmark = (bm:number) => {
     bookmarks.value.push(lok.value+':'+bm)
 }
-// watch(
-//     route.params,
-//     (current: number, previous: number) => {
-//         if (['lok']) {
-//             lok.value = routeParams.value.lok
-//         }
-//         lok.value = current.lok
-//     }
-// )
+const navToHash = (hash:string) => {
+    router.go(hash)
+}
+watch(
+    route.params.lok,
+    (current: number) => {
+        lok.value = current
+    }
+)
 </script>
 <template>
     <q-page padding class="rtl">
@@ -63,7 +70,7 @@ const saveBookmark = (bm:number) => {
 
                 <q-card-section class="block pcs">
                     <VueScrollPicker :options="options" v-model="lok" />
-                    <q-input fab mini v-model="lok" type="number" :max="114" :min="1" label="Sura" />
+                    <q-input fab mini v-model="route.params.lok" type="number" :max="114" :min="1" label="Sura" />
 
                 </q-card-section>
 
@@ -80,7 +87,7 @@ const saveBookmark = (bm:number) => {
                 <q-card-section>
                     bookmarks
                     <ol>
-                        <li v-for="b in bookmarks" :key="b">{{ b }}</li>
+                        <li v-for="b in bookmarks" :key="b" @click="navToHash(b)">{{ b }}</li>
                     </ol>
                 </q-card-section>
             </q-card>
@@ -90,7 +97,7 @@ const saveBookmark = (bm:number) => {
                 </q-card-section>
                 <q-card-section>
                     <span class="capitalize block just fit verse">
-                        <i class="q-mx-sm" v-for="aya in sura.ayat" :key="aya.verse">{{ aya.text }}
+                        <i class="q-mx-sm" v-for="aya in sura.ayat" :key="aya.verse" :hash="lok+':'+aya.verse">{{ aya.text }}
                             <q-chip class="text-white bg-green">{{ aya.verse }}</q-chip>
                             <q-btn dense color="primary" icon="check" label="Bookmark" @click="saveBookmark(aya.verse)" />
                         </i>

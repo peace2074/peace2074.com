@@ -10,8 +10,16 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@nuxt/eslint',
     'nuxt-quasar-ui',
+    '@nuxtjs/i18n',
   ],
-
+  i18n: {
+    baseUrl: 'https://peace2074.com/',
+    locales: [
+      { code: 'en', language: 'en-US' },
+      { code: 'ar', language: 'ar-PL' }
+    ],
+    defaultLocale: 'en',
+  },
   devtools: {
     enabled: true,
   },
