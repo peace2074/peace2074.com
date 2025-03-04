@@ -1,25 +1,25 @@
 <script lang="ts" setup>
+import { useQuasar , useI18n ,ref, computed } from '#imports'
+
 const $q = useQuasar()
 const offset = ref([0, 18])
 const toggleLeftDrawer = ref(false)
-const { locale, locales } = useI18n()
+const { locale, availableLocales } = useI18n() as { locale: any, availableLocales: any }
 const switchLocalePath = useSwitchLocalePath()
-// const locales = ref([
-//   { code: 'en', language: 'en-US' },
-//   { code: 'ar', language: 'ar-PL' },
-// ])
-const availableLocales = computed(() => {
-  return locales.value.filter((i: { code: string }) => i.code !== locale.value)
+
+const filteredLocales = computed(() => {
+  return availableLocales.value.filter((i: { code: string }) => i.code !== locale.value)
 })
+
 const { toggle } = $q.dark
 function toggleDark() {
   toggle()
   return $q.dark.mode
 }
-function toggleDrwer() {
+
+function toggleDrawer() {
   toggleLeftDrawer.value = !toggleLeftDrawer.value
 }
-
 </script>
 
 <template>

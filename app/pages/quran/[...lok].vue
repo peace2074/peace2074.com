@@ -1,15 +1,15 @@
 <script lang="ts" async setup>
+const nuxtApp = useNuxtApp()
 import { VueScrollPicker } from 'vue-scroll-picker'
 import "vue-scroll-picker/style.css";
 import { useHead, useNuxtApp, useRoute,watch } from '#imports';
 import revQuranT from '../../../server/api/quran'
 import type { QDBI } from '../../../shared/types/index';
-const nuxtApp = useNuxtApp()
 const { $quran } = nuxtApp
 type AYAT = {
-    chapter: number,
-    verse: number
-    text: string[]
+    chapter: number;
+    verse: number;
+    text: string[];
 }
 export interface ONE_INTERFACE {
     [k: string]: number | string | AYAT[]
@@ -28,8 +28,8 @@ useHead({
     ogDescription: appDescription,
 });
 const route = useRoute()
-const routeParams = computed(()=>route.params)
-let lok: Ref<number> = ref(route.params.lok || 1)
+const routeParams = computed(()=>route.params.lok)
+let lok: Ref<number> = ref(1)
 const bookmarks:Ref<string[]> = ref([])
 const anchor = ref('')
 const router = useRouter({
@@ -44,7 +44,7 @@ const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
 const Verses = computed(() => sura.value.ayat)
 const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
 ({
-    name: Single.name,
+    name: Single.id+'-'+Single.name,
     value: Single.id
 }))
 watchEffect(() => {
@@ -57,9 +57,9 @@ const navToHash = (hash:string) => {
     router.go(hash)
 }
 watch(
-    route.params.lok,
+    lok,
     (current: number) => {
-        lok.value = current
+        router.replace(`/quran/${current}`)
     }
 )
 </script>
@@ -70,7 +70,7 @@ watch(
 
                 <q-card-section class="block pcs">
                     <VueScrollPicker :options="options" v-model="lok" />
-                    <q-input fab mini v-model="route.params.lok" type="number" :max="114" :min="1" label="Sura" />
+                    <q-input fab mini v-model="lok" type="number" :max="114" :min="1" label="Sura" />
 
                 </q-card-section>
 
@@ -97,9 +97,9 @@ watch(
                 </q-card-section>
                 <q-card-section>
                     <span class="capitalize block just fit verse">
-                        <i class="q-mx-sm" v-for="aya in sura.ayat" :key="aya.verse" :hash="lok+':'+aya.verse">{{ aya.text }}
+                        <i class="q-mx-sm" v-for="aya in sura.ayat" :key="aya.verse" :hash="aya.verse">{{ aya.text }}
                             <q-chip class="text-white bg-green">{{ aya.verse }}</q-chip>
-                            <q-btn dense color="primary" icon="check" label="Bookmark" @click="saveBookmark(aya.verse)" />
+                            <q-btn dense fab-mini color="yellow" size="10" icon="bookmark" @click="saveBookmark(aya.verse)" />
                         </i>
                     </span>
                 </q-card-section>
@@ -108,6 +108,8 @@ watch(
     </q-page>
 </template>
 <style lang="scss">
+@import "vue-scroll-picker/style.css";
+
 .just {
     text-align: justify;
     letter-spacing: 1px;
