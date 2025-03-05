@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { pwa } from './app/config/pwa'
+import  path from 'node:path'
 // import { createResolver } from '@nuxt/kit'
 import { appDescription } from './app/constants/index'
 
@@ -19,12 +20,9 @@ export default defineNuxtConfig({
   ],
   i18n: {
     baseUrl: 'https://peace2074.com/',
-    langDir: resolve('app/locale/index'),
-    locales: [
-      { code: 'en', language: 'en-US' },
-      { code: 'ar', language: 'ar-IL' }
-    ],
     defaultLocale: 'en',
+    vueI18nLoader: true,
+    vueI18n: './i18n.config.ts'
   },
   devtools: {
     enabled: true,
