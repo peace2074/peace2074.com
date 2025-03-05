@@ -59,7 +59,7 @@ const navToHash = (hash:string) => {
 watch(
     lok,
     (current: number) => {
-        router.replace(`/quran/${current}`)
+        router.replace({ params: { lok: current }})
     }
 )
 </script>
