@@ -1,8 +1,12 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
 import { pwa } from './app/config/pwa'
-import resolve from 'resolve'
+// import { createResolver } from '@nuxt/kit'
 import { appDescription } from './app/constants/index'
 
+// const { resolve } = createResolver(import.meta.url)
+
 export default defineNuxtConfig({
+  devtools: { enabled: true },
   modules: [
     '@vueuse/nuxt',
     '@unocss/nuxt',
@@ -15,17 +19,16 @@ export default defineNuxtConfig({
   ],
   i18n: {
     baseUrl: 'https://peace2074.com/',
-    langDir: resolve('./app/locale/messages'),
+    langDir: resolve('app/locale/index'),
     locales: [
       { code: 'en', language: 'en-US' },
-      { code: 'ar', language: 'ar-PS' }
+      { code: 'ar', language: 'ar-IL' }
     ],
     defaultLocale: 'en',
   },
   devtools: {
     enabled: true,
   },
-
   app: {
     head: {
       viewport: 'width=device-width,initial-scale=1',
@@ -33,7 +36,7 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
         { rel: 'icon', type: 'image/svg+xml', href: '/nuxt.svg' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
-        { rel: 'stylesheet', href:'https://cdn.jsdelivr.net/npm/quasar@2.17.7/dist/quasar.prod.css'}
+        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/quasar@2.17.7/dist/quasar.prod.css' }
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -44,12 +47,10 @@ export default defineNuxtConfig({
       ],
     },
   },
-
   css: [
     '@unocss/reset/tailwind.css',
     '~/assets/app.scss',
   ],
-
   colorMode: {
     classSuffix: '',
   },
@@ -57,7 +58,6 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
     // but missing on offline, disabling extraction it until fixed
@@ -65,9 +65,6 @@ export default defineNuxtConfig({
     renderJsonPayloads: true,
     typedPages: true,
   },
-
-  compatibilityDate: '2024-08-14',
-
   nitro: {
     rollupConfig: {
       external: ['resolve'],
@@ -90,7 +87,7 @@ export default defineNuxtConfig({
         '../app/components'
       ]
     }
-    
+
   },
   imports: {
     autoImport: true,
@@ -115,4 +112,5 @@ export default defineNuxtConfig({
   },
 
   pwa,
+  compatibilityDate: "2025-03-05"
 })
