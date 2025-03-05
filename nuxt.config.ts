@@ -1,4 +1,5 @@
 import { pwa } from './app/config/pwa'
+import resolve from 'resolve'
 import { appDescription } from './app/constants/index'
 
 export default defineNuxtConfig({
@@ -14,9 +15,10 @@ export default defineNuxtConfig({
   ],
   i18n: {
     baseUrl: 'https://peace2074.com/',
+    langDir: resolve('./app/locale/messages'),
     locales: [
       { code: 'en', language: 'en-US' },
-      { code: 'ar', language: 'ar-PL' }
+      { code: 'ar', language: 'ar-PS' }
     ],
     defaultLocale: 'en',
   },
@@ -67,6 +69,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-08-14',
 
   nitro: {
+    rollupConfig: {
+      external: ['resolve'],
+    },
     esbuild: {
       options: {
         target: 'esnext',
