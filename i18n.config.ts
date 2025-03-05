@@ -1,7 +1,7 @@
 import { en, ar} from "./app/locale";
 export default defineI18nConfig(() => ({
     legacy: false,
-    locale: 'en',
+    locale: 'ar',
     locales: [
         {
             code: 'en',

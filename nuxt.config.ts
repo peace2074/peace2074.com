@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   ],
   i18n: {
     baseUrl: 'https://peace2074.com/',
-    defaultLocale: 'en',
+    defaultLocale: 'ar',
     vueI18nLoader: true,
     vueI18n: './i18n.config.ts'
   },
