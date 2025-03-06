@@ -2,11 +2,11 @@
 const nuxtApp = useNuxtApp()
 import { VueScrollPicker } from 'vue-scroll-picker'
 import "vue-scroll-picker/style.css";
-import { useHead, useNuxtApp, useRoute,watch } from '#imports';
+import { useHead, useNuxtApp, useRoute, watch, useI18n } from '#imports';
 import revQuranT from '../../../server/api/quran'
 import type { QDBI } from '../../../shared/types/index';
 const { $quran } = nuxtApp
-type AYAT = {
+export type AYAT = {
     chapter: number;
     verse: number;
     text: string[];
@@ -20,6 +20,7 @@ export interface ONE_INTERFACE {
     total: number,
     ayat: AYAT[]
 }
+const { t } = useI18n()
 
 useHead({
     title: appName,
@@ -28,9 +29,9 @@ useHead({
     ogDescription: appDescription,
 });
 const route = useRoute()
-const routeParams = computed(()=>route.params.lok)
+const routeParams = computed(() => route.params.lok)
 let lok: Ref<number> = ref(1)
-const bookmarks:Ref<string[]> = ref([])
+const bookmarks: Ref<string[]> = ref([])
 const anchor = ref('')
 const router = useRouter({
     scrollBehavior(to: any, from: string) {
@@ -44,22 +45,22 @@ const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
 const Verses = computed(() => sura.value.ayat)
 const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
 ({
-    name: Single.id+'-'+Single.name,
+    name: Single.id + '-' + Single.name,
     value: Single.id
 }))
 watchEffect(() => {
     lok.value = route.params.lok
 })
-const saveBookmark = (bm:number) => {
-    bookmarks.value.push(lok.value+':'+bm)
+const saveBookmark = (bm: number) => {
+    bookmarks.value.push(lok.value + ':' + bm)
 }
-const navToHash = (hash:string) => {
+const navToHash = (hash: string) => {
     router.go(hash)
 }
 watch(
     lok,
     (current: number) => {
-        router.replace({ params: { lok: current }})
+        router.replace({ params: { lok: current } })
     }
 )
 </script>
@@ -76,16 +77,16 @@ watch(
 
                 <q-card-section class="rtl flex">
                     <div>
-                        <h4 class="text-h3"><span class="text-h6">اسم السورة</span>{{ sura.name }}</h4>
-                        <h5 class="text-h5"><span class="text-h6">رقم</span>:{{ sura.id }}</h5>
+                        <h4 class="text-h3"><span class="text-h6">{{ t('pages.quran.sura.name') }}</span>{{ sura.name }}</h4>
+                        <h5 class="text-h5"><span class="text-h6">{{ t('pages.quran.sura.id') }}</span>:{{ sura.id }}</h5>
                     </div>
                     <div>
-                        <h4 class="capitalize align-left text-h6">Number of Verses:{{ sura.total_verses }}</h4>
-                        <h4 class="capitalize align-left text-h6">Location:{{ sura.type }}</h4>
+                        <h4 class=" align-left text-h6">{{ t('pages.quran.sura.totverses') }}:{{ sura.total_verses }}</h4>
+                        <h4 class=" align-left text-h6">{{ t('pages.quran.sura.location') }}:{{ sura.type }}</h4>
                     </div>
                 </q-card-section>
                 <q-card-section>
-                    bookmarks
+                    {{ t('pages.quran.sura.bookmark') }}
                     <ol>
                         <li v-for="b in bookmarks" :key="b" @click="navToHash(b)">{{ b }}</li>
                     </ol>
@@ -99,7 +100,8 @@ watch(
                     <span class="capitalize block just fit verse">
                         <i class="q-mx-sm" v-for="aya in sura.ayat" :key="aya.verse" :hash="aya.verse">{{ aya.text }}
                             <q-chip class="text-white bg-green">{{ aya.verse }}</q-chip>
-                            <q-btn dense fab-mini color="yellow" size="10" icon="bookmark" @click="saveBookmark(aya.verse)" />
+                            <q-btn dense fab-mini color="yellow" size="10" icon="bookmark"
+                                @click="saveBookmark(aya.verse)" />
                         </i>
                     </span>
                 </q-card-section>

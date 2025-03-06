@@ -4,7 +4,7 @@ import { useQuasar , useI18n ,ref, computed } from '#imports'
 const $q = useQuasar()
 const offset = ref([0, 18])
 const toggleLeftDrawer = ref(false)
-const { locale, availableLocales } = useI18n() as { locale: any, availableLocales: any }
+let { locale, availableLocales } = useI18n() as { locale: any, availableLocales: any }
 const switchLocalePath = useSwitchLocalePath()
 
 const filteredLocales = computed(() => {
@@ -16,7 +16,10 @@ function toggleDark() {
   toggle()
   return $q.dark.mode
 }
-
+function toggleLang() {
+ 
+  locale =  'en'
+}
 function toggleDrawer() {
   toggleLeftDrawer.value = !toggleLeftDrawer.value
 }
@@ -27,11 +30,13 @@ function toggleDrawer() {
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleDrwer" />
+        <q-btn dense flat round icon="menu" @click="toggleDrawer" />
         <q-toolbar-title>
           <nuxt-link :title="appName" to="/">{{ appName }}</nuxt-link>
         </q-toolbar-title>
         <q-btn dense flat round icon="light" @click="toggleDark" />
+        <q-btn dense flat round icon="translate" @click="toggleLang"/>
+
       </q-toolbar>
       <q-toolbar-title>
         <NuxtLink v-for="locale in availableLocales" :key="locale.code" :to="switchLocalePath(locale.code)">

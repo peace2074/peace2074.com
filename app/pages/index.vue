@@ -33,8 +33,9 @@ const online = useOnline()
         </div>
       </template>
     </ClientOnly>
-    <NuxtLink class="q-mt-xl text-h3 block" title="Quran" :to="'/quran/1'">{{ t('pages.quran') }}</NuxtLink>
-    <NuxtLink class="q-mt-xl text-h3 block" title="HolyNames" to="/holynames">{{ $t('pages.holynames')}}</NuxtLink>
+    <NuxtLink class="q-mt-xl text-h6 block" :title="t('pages.quran.pageTitle')" :to="'/quran/1'">{{ t('pages.quran.pageTitle') }}</NuxtLink>
+    <NuxtLink class="q-mt-xl text-h6 block" :title="t('pages.quran.holynames')" to="/holynames">{{ $t('pages.holynames')}}</NuxtLink>
+    <NuxtLink class="q-mt-xl text-h6 block" :title="t('pages.miracles.pageTitle')" to="/miracles">{{ $t('pages.miracles.pageTitle')}}</NuxtLink>
 
   </q-page>
 </template>

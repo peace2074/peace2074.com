@@ -13,7 +13,7 @@ export default defineNuxtPlugin(async nuxtApp => {
 
 
     if (data && data.value) {
-        useState('HolyNames', () => JSON.stringify(data.value.data))
+        useState('HolyNames', () => data.value.data)
         nuxtApp.provide('HolyNames', data.value.data)
     }
 

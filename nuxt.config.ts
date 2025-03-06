@@ -1,10 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { pwa } from './app/config/pwa'
-import  path from 'node:path'
-// import { createResolver } from '@nuxt/kit'
 import { appDescription } from './app/constants/index'
-
-// const { resolve } = createResolver(import.meta.url)
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -57,8 +53,6 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
   experimental: {
-    // when using generate, payload js assets included in sw precache manifest
-    // but missing on offline, disabling extraction it until fixed
     payloadExtraction: true,
     renderJsonPayloads: true,
     typedPages: true,
@@ -73,7 +67,7 @@ export default defineNuxtConfig({
       },
     },
     prerender: {
-      crawlLinks: false,
+      crawlLinks:true,
       routes: ['/'],
       ignore: ['/hi'],
     },

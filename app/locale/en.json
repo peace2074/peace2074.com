@@ -23,7 +23,19 @@
     },
     "pages": {
         "holynames": "God's Glory Names",
-        "quran": "The Holy Quran"
+        "quran": {
+            "pageTitle": "The Holy Quran",
+            "sura": {
+                "name": "sura's Name",
+                "id": "sura number",
+                "location": "sura Location",
+                "totverses": "number of verses",
+                "bookmark":"bookmark"
+            }
+        },
+        "miracles":{
+            "pageTitle":"Miracles Page"
+        }
     },
     "general": {
         "Home": "Home",
