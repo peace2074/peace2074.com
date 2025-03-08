@@ -16,10 +16,10 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
   ],
   i18n: {
-    baseUrl: 'https://peace2074.com/',
+    baseUrl: 'https://peace2074.com',
     defaultLocale: 'ar',
     vueI18nLoader: true,
-    vueI18n: './i18n.config.ts'
+    vueI18n: '~/i18n.config'
   },
   devtools: {
     enabled: true,
