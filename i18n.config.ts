@@ -1,4 +1,7 @@
-import { en, ar} from "./app/locale";
+import { en, ar } from "./app/locale";
+export type LocaleT = { code: string; name: string; messages: string[] };
+export type LocalesT = Locale[]
+    
 export default defineI18nConfig(() => ({
     legacy: false,
     locale: 'ar',
@@ -6,7 +9,7 @@ export default defineI18nConfig(() => ({
         {
             code: 'en',
             name: 'English',
-            messages:en
+            messages: en
         },
         {
             code: 'ar',

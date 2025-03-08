@@ -6,11 +6,21 @@
     /* CSS for other than iOS devices */
 }
 
-.body--light{
+body.body--light{
     color: black;
     background-color: white;
 }
-
+body.body--dark{
+    color: white;
+    background-color: black;
+}
+.vue-scroll-picker-layer-top{
+    background-color: green !important;
+    height: .5 var(--vh);
+}
+.vue-scroll-picker-layer-bottom{
+    background-color: greenyellow !important;
+}
 .holynames-page{
     height: max-content;
     width: max-content;

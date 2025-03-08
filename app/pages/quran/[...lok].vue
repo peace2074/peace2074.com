@@ -32,6 +32,9 @@ const route = useRoute()
 const routeParams = computed(() => route.params.lok)
 let lok: Ref<number> = ref(1)
 const bookmarks: Ref<string[]> = ref([])
+const scrollOptions  ={
+
+}
 const anchor = ref('')
 const router = useRouter({
     scrollBehavior(to: any, from: string) {

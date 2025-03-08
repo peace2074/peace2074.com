@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { pwa } from './app/config/pwa'
 import { appDescription } from './app/constants/index'
+import { QuasarOptions } from './qusarOptions'
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -41,6 +42,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+  quasar: QuasarOptions,
   css: [
     '@unocss/reset/tailwind.css',
     '~/assets/app.scss',
