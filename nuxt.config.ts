@@ -2,9 +2,10 @@
 import { pwa } from './app/config/pwa'
 import { appDescription } from './app/constants/index'
 import { QuasarOptions } from './qusarOptions'
+import defineI18nConfig from './i18n.config';
 
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     '@vueuse/nuxt',
     '@unocss/nuxt',
@@ -17,9 +18,9 @@ export default defineNuxtConfig({
   ],
   i18n: {
     baseUrl: 'https://peace2074.com',
-    defaultLocale: 'ar',
+    defaultLocale: 'en',
     vueI18nLoader: true,
-    vueI18n: '~/i18n.config'
+    vueI18n: '../i18n.config'
   },
   devtools: {
     enabled: true,
@@ -31,7 +32,8 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
         { rel: 'icon', type: 'image/svg+xml', href: '/nuxt.svg' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
-        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/quasar@2.17.7/dist/quasar.prod.css' }
+        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/quasar@2.17.7/dist/quasar.prod.css' },
+        { rel: 'stylesheet', href: ' https://fonts.googleapis.com/css2?family=DM+Sans&family=DM+Serif+Display&family=DM+Mono&display=swap' }
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },

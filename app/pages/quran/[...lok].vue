@@ -1,149 +1,158 @@
 <script lang="ts" async setup>
-const nuxtApp = useNuxtApp()
+import type { QDBI } from '../../../shared/types/index'
+import { useHead, useI18n, useNuxtApp, useRoute, watch } from '#imports'
 import { VueScrollPicker } from 'vue-scroll-picker'
-import "vue-scroll-picker/style.css";
-import { useHead, useNuxtApp, useRoute, watch, useI18n } from '#imports';
 import revQuranT from '../../../server/api/quran'
-import type { QDBI } from '../../../shared/types/index';
-const { $quran } = nuxtApp
-export type AYAT = {
-    chapter: number;
-    verse: number;
-    text: string[];
+import 'vue-scroll-picker/style.css'
+
+const nuxtApp = useNuxtApp()
+
+export interface AYAT {
+  chapter: number
+  verse: number
+  text: string[]
 }
 export interface ONE_INTERFACE {
-    [k: string]: number | string | AYAT[]
-    id: number,
-    name: string,
-    e_name: string,
-    type: string,
-    total: number,
-    ayat: AYAT[]
+  [k: string]: number | string | AYAT[]
+  id: number
+  name: string
+  e_name: string
+  type: string
+  total: number
+  ayat: AYAT[]
 }
 const { t } = useI18n()
 
 useHead({
-    title: appName,
-    appDescription: appDescription,
-    ogTitle: appName,
-    ogDescription: appDescription,
-});
+  title: appName,
+  appDescription,
+  ogTitle: appName,
+  ogDescription: appDescription,
+})
 const route = useRoute()
-const routeParams = computed(() => route.params.lok)
-let lok: Ref<number> = ref(1)
+const lok: Ref<number> = ref(1)
 const bookmarks: Ref<string[]> = ref([])
-const scrollOptions  ={
-
-}
-const anchor = ref('')
+//const anchor = ref('')
 const router = useRouter({
-    scrollBehavior(to: any, from: string) {
-        if (to.hash) {
-            return { el: to.hash }
-        }
-    },
+  scrollBehavior(to: any, _from: string) {
+    if (to.hash) {
+      return { el: to.hash }
+    }
+  },
 })
-const Quran: ONE_INTERFACE[] = nuxtApp.payload.data.B6H5jvHlMH
+const Quran: ONE_INTERFACE[] = nuxtApp.payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ'];
 const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
-const Verses = computed(() => sura.value.ayat)
+//const Verses = computed(() => sura.value.ayat)
 const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
-({
-    name: Single.id + '-' + Single.name,
-    value: Single.id
-}))
+  ({
+    name: `${Single.id}-${Single.name}`,
+    value: Single.id,
+  }))
 watchEffect(() => {
-    lok.value = route.params.lok
+  lok.value = route.params.lok
 })
-const saveBookmark = (bm: number) => {
-    bookmarks.value.push(lok.value + ':' + bm)
+function saveBookmark(bm: number) {
+  bookmarks.value.push(`${lok.value}:${bm}`)
 }
-const navToHash = (hash: string) => {
-    router.go(hash)
+function navToHash(hash: string) {
+  router.go(hash)
 }
 watch(
-    lok,
-    (current: number) => {
-        router.replace({ params: { lok: current } })
-    }
+  lok,
+  (current: number) => {
+    router.replace({ params: { lok: current } })
+  },
 )
 </script>
+
 <template>
-    <q-page padding class="rtl">
-        <div class="q-gutter-md" column>
-            <q-card class="text-md">
+  <q-page padding class="rtl">
+    <div class="q-gutter-md" column>
+      <q-card class="text-md">
+        <q-card-section class="pcs block">
+          <VueScrollPicker v-model="lok" :options="options" />
+          <q-input v-model="lok" fab mini type="number" :max="114" :min="1" label="Sura" />
+        </q-card-section>
 
-                <q-card-section class="block pcs">
-                    <VueScrollPicker :options="options" v-model="lok" />
-                    <q-input fab mini v-model="lok" type="number" :max="114" :min="1" label="Sura" />
-
-                </q-card-section>
-
-                <q-card-section class="rtl flex">
-                    <div>
-                        <h4 class="text-h3"><span class="text-h6">{{ t('pages.quran.sura.name') }}</span>{{ sura.name }}</h4>
-                        <h5 class="text-h5"><span class="text-h6">{{ t('pages.quran.sura.id') }}</span>:{{ sura.id }}</h5>
-                    </div>
-                    <div>
-                        <h4 class=" align-left text-h6">{{ t('pages.quran.sura.totverses') }}:{{ sura.total_verses }}</h4>
-                        <h4 class=" align-left text-h6">{{ t('pages.quran.sura.location') }}:{{ sura.type }}</h4>
-                    </div>
-                </q-card-section>
-                <q-card-section>
-                    {{ t('pages.quran.sura.bookmark') }}
-                    <ol>
-                        <li v-for="b in bookmarks" :key="b" @click="navToHash(b)">{{ b }}</li>
-                    </ol>
-                </q-card-section>
-            </q-card>
-            <q-card class="q-mt-xs">
-                <q-card-section>
-                    <h3>{{ AlFateha }}</h3>
-                </q-card-section>
-                <q-card-section>
-                    <span class="capitalize block just fit verse">
-                        <i class="q-mx-sm" v-for="aya in sura.ayat" :key="aya.verse" :hash="aya.verse">{{ aya.text }}
-                            <q-chip class="text-white bg-green">{{ aya.verse }}</q-chip>
-                            <q-btn dense fab-mini color="yellow" size="10" icon="bookmark"
-                                @click="saveBookmark(aya.verse)" />
-                        </i>
-                    </span>
-                </q-card-section>
-            </q-card>
-        </div>
-    </q-page>
+        <q-card-section class="rtl flex">
+          <div>
+            <h4 class="text-h3">
+              <span class="text-h6">{{ t('pages.quran.sura.name') }}</span>{{ sura.name }}
+            </h4>
+            <h5 class="text-h5">
+              <span class="text-h6">{{ t('pages.quran.sura.id') }}</span>:{{ sura.id }}
+            </h5>
+          </div>
+          <div>
+            <h4 class="align-left text-h6">
+              {{ t('pages.quran.sura.totverses') }}:{{ sura.total_verses }}
+            </h4>
+            <h4 class="align-left text-h6">
+              {{ t('pages.quran.sura.location') }}:{{ sura.type }}
+            </h4>
+          </div>
+        </q-card-section>
+        <q-card-section>
+          {{ t('pages.quran.sura.bookmark') }}
+          <ol>
+            <li v-for="b in bookmarks" :key="b" @click="navToHash(b)">
+              {{ b }}
+            </li>
+          </ol>
+        </q-card-section>
+      </q-card>
+      <q-card class="q-mt-xs">
+        <q-card-section>
+          <h3>{{ AlFateha }}</h3>
+        </q-card-section>
+        <q-card-section>
+          <span class="just fit verse block capitalize">
+            <i v-for="aya in sura.ayat" :key="aya.verse" class="q-mx-sm" :hash="aya.verse">{{ aya.text }}
+              <q-chip class="bg-green text-white">{{ aya.verse }}</q-chip>
+              <q-btn
+                dense fab-mini color="yellow" size="10" icon="bookmark"
+                @click="saveBookmark(aya.verse)"
+              />
+            </i>
+          </span>
+        </q-card-section>
+      </q-card>
+    </div>
+  </q-page>
 </template>
+
 <style lang="scss">
-@import "vue-scroll-picker/style.css";
+@import 'vue-scroll-picker/style.css';
 
 .just {
-    text-align: justify;
-    letter-spacing: 1px;
-    font-size: larger;
+  text-align: justify;
+  letter-spacing: 1px;
+  font-size: larger;
 }
 
 .capitalize::first-letter {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 .rtl {
-    direction: rtl;
+  direction: rtl;
 }
 
 .ltr {
-    direction: ltr;
+  direction: ltr;
 }
 
 .pcs {
-    overflow-x: scroll;
-    overflow-y: hidden;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .flex {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: nowrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: nowrap;
 }
 
 // .verse::after {
@@ -151,14 +160,14 @@ watch(
 // }
 
 .verse {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
 .align-left {
-    text-align: left;
+  text-align: left;
 }
 
 .align-right {
-    text-align: right;
+  text-align: right;
 }
 </style>
