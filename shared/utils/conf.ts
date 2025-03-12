@@ -1,16 +1,18 @@
-import client from '../config/client'
-import dev from '../config/dev'
-import prod from '../config/prod'
+import client from '../../app/config/client'
+import dev from '../../app/config/dev'
+import prod from '../../app/config/prod'
 import server from '../../server/config/server'
+
 type CT = typeof client
 type DT = typeof dev
 type PT = typeof prod
 type ST = typeof server
 
 class Conf {
-  [x: string]: {};
+  [x: string]: object;
   constructor() {
-    const self = this;
+    // eslint-disable-next-line ts/no-this-alias
+    const self = this
 
     self.setEnvironment()
     self._server = self.getServerVars() as ST
@@ -28,12 +30,13 @@ class Conf {
     )
     // console.log("this._store", this._store);
   }
+
   set(key: string, value: string | number | object) {
     if (key.match(/:/)) {
       const keys = key.split(':')
       let storeKey = this._store
 
-      keys.forEach(function (k: string | number, i: number) {
+      keys.forEach((k: string | number, i: number) => {
         if (keys.length === i + 1) {
           storeKey[k] = value
         }
@@ -44,7 +47,8 @@ class Conf {
 
         storeKey = storeKey[k]
       })
-    } else {
+    }
+    else {
       this._store[key] = value
     }
   }
@@ -77,7 +81,6 @@ class Conf {
     return this.getItem('dev')
   }
 
-
   server() {
     return this.getItem('server')
   }
@@ -93,7 +96,8 @@ class Conf {
   setEnvironment() {
     if (import.meta.client) {
       this._env = 'client'
-    } else {
+    }
+    else {
       this._env = 'server'
     }
   }
@@ -104,9 +108,12 @@ class Conf {
     if (import.meta.server) {
       try {
         serverVars = server
-      } catch (e) {
+      }
+      // eslint-disable-next-line unused-imports/no-unused-vars
+      catch (err: any) {
+        // eslint-disable-next-line node/prefer-global/process
         if (process.env.NODE_ENV === 'development') {
-          console.warn("Didn't find a server config in `./config`.")
+          console.warn('Didn\'t find a server config in `./config`.')
         }
       }
     }
@@ -119,10 +126,12 @@ class Conf {
 
     try {
       clientVars = client
-    } catch (e) {
+    }
+    // eslint-disable-next-line unused-imports/no-unused-vars
+    catch (e) {
       clientVars = {}
       if (import.meta.dev) {
-        console.warn("Didn't find a client config in `./config`.")
+        console.warn('Didn\'t find a client config in `./config`.')
       }
     }
 
@@ -133,15 +142,18 @@ class Conf {
     let overrides
     const filename = import.meta.dev ? 'dev' : 'prod'
     try {
-      overrides =
-        import.meta.dev
+      overrides
+        = import.meta.dev
           ? dev
           : prod
-      if (filename === 'dev') 
+      if (filename === 'dev') {
         console.warn(
-          `FYI: data in \`./config/${filename}.js\` file will override Server & Client equal data/values.` )
-    
-    } catch (e) {
+          `FYI: data in \`./config/${filename}.js\` file will override Server & Client equal data/values.`,
+        )
+      }
+    }
+    // eslint-disable-next-line unused-imports/no-unused-vars
+    catch (e) {
       overrides = {}
     }
 
@@ -154,10 +166,12 @@ class Conf {
     const keys = nestedKey.split(':')
     let storeKey = this._store
 
-    keys.forEach(function (k: string | number) {
+    keys.forEach((k: string | number) => {
       try {
         storeKey = storeKey[k]
-      } catch (e) {
+      }
+      // eslint-disable-next-line unused-imports/no-unused-vars
+      catch (e) {
         return undefined
       }
     })
