@@ -1,11 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { pwa } from './app/config/pwa'
 import { appDescription } from './app/constants/index'
+import defineI18nConfig from './i18n.config'
 import { QuasarOptions } from './qusarOptions'
-import defineI18nConfig from './i18n.config';
 
 export default defineNuxtConfig({
-  devtools: { enabled: false },
   modules: [
     '@vueuse/nuxt',
     '@unocss/nuxt',
@@ -15,13 +14,21 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'nuxt-quasar-ui',
     '@nuxtjs/i18n',
+    'nuxt-gtag',
   ],
-  i18n: {
-    baseUrl: 'https://peace2074.com',
-    defaultLocale: 'en',
-    vueI18nLoader: true,
-    vueI18n: '../i18n.config'
+  imports: {
+    autoImport: true,
+    dirs: [
+      '../app/constants',
+      '../app/layouts',
+      '../app/store',
+      '../app/composables',
+      '../app/components',
+      '../shared',
+      '../server/uils',
+    ],
   },
+  devtools: { enabled: false },
   devtools: {
     enabled: true,
   },
@@ -33,7 +40,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/svg+xml', href: '/nuxt.svg' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/quasar@2.17.7/dist/quasar.prod.css' },
-        { rel: 'stylesheet', href: ' https://fonts.googleapis.com/css2?family=DM+Sans&family=DM+Serif+Display&family=DM+Mono&display=swap' }
+        { rel: 'stylesheet', href: ' https://fonts.googleapis.com/css2?family=DM+Sans&family=DM+Serif+Display&family=DM+Mono&display=swap' },
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -44,7 +51,6 @@ export default defineNuxtConfig({
       ],
     },
   },
-  quasar: QuasarOptions,
   css: [
     '@unocss/reset/tailwind.css',
     '~/assets/app.scss',
@@ -61,6 +67,7 @@ export default defineNuxtConfig({
     renderJsonPayloads: true,
     typedPages: true,
   },
+  compatibilityDate: '2025-03-05',
   nitro: {
     rollupConfig: {
       external: ['resolve'],
@@ -71,7 +78,7 @@ export default defineNuxtConfig({
       },
     },
     prerender: {
-      crawlLinks:true,
+      crawlLinks: true,
       routes: ['/'],
       ignore: ['/hi'],
     },
@@ -80,22 +87,10 @@ export default defineNuxtConfig({
       dirs: [
         '../shared',
         '../app/constants',
-        '../app/components'
-      ]
-    }
+        '../app/components',
+      ],
+    },
 
-  },
-  imports: {
-    autoImport: true,
-    dirs: [
-      '../app/constants',
-      '../app/layouts',
-      '../app/store',
-      '../app/composables',
-      '../app/components',
-      '../shared',
-      '../server/uils'
-    ]
   },
 
   eslint: {
@@ -106,7 +101,16 @@ export default defineNuxtConfig({
       },
     },
   },
+  gtag: {
+    id: 'G-XN9FGVQBKX',
+  },
+  i18n: {
+    baseUrl: 'https://peace2074.com',
+    defaultLocale: 'en',
+    vueI18nLoader: true,
+    vueI18n: '../i18n.config',
+  },
 
   pwa,
-  compatibilityDate: "2025-03-05"
+  quasar: QuasarOptions,
 })

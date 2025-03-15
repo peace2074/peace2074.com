@@ -32,6 +32,7 @@
     "fontawesome-v6": "link:@quasar/extras/fontawesome-v6",
     "jsdom": "^26.0.0",
     "nuxt": "^3.16.0",
+    "nuxt-gtag": "3.0.2",
     "pinia": "^2.3.1",
     "sass": "^1.85.1",
     "typescript": "^5.8.2",

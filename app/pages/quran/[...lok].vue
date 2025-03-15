@@ -1,8 +1,8 @@
 <script lang="ts" async setup>
-import type { QDBI } from '../../../shared/types/index'
+// import type { QDBI } from '../../../shared/types/index'
+// import revQuranT from '../../../server/api/quran'
 import { useHead, useI18n, useNuxtApp, useRoute, watch } from '#imports'
 import { VueScrollPicker } from 'vue-scroll-picker'
-import revQuranT from '../../../server/api/quran'
 import 'vue-scroll-picker/style.css'
 
 const nuxtApp = useNuxtApp()
