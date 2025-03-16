@@ -1,12 +1,29 @@
 <script lang="ts" async setup>
 // import type { QDBI } from '../../../shared/types/index'
 // import revQuranT from '../../../server/api/quran'
-import { definePageMeta, useHead, useI18n, useNuxtApp, useRoute, watch } from '#imports'
+import { useHead, useI18n, useNuxtApp, useRoute, watch } from '#imports'
 import { VueScrollPicker } from 'vue-scroll-picker'
 import 'vue-scroll-picker/style.css'
 
 const nuxtApp = useNuxtApp()
+const $q = useQuasar()
 
+$q.fullscreen.request()
+  .then(() => {
+    // success!
+  })
+  // .catch((err) => {
+  //   // oh, no!!!
+  // })
+
+// Exiting fullscreen mode:
+$q.fullscreen.exit()
+  .then(() => {
+    // success!
+  })
+  // .catch((err) => {
+  //   // oh, no!!!
+  // })
 export interface AYAT {
   chapter: number
   verse: number
