@@ -5,7 +5,7 @@ const { t } = useI18n()
 
 definePageMeta({
   layout: 'default',
-  title: 'pages.quran',
+  title: 'Main Page',
 })
 const online = useOnline()
 </script>

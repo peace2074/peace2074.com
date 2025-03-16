@@ -1,7 +1,7 @@
 <script lang="ts" async setup>
 // import type { QDBI } from '../../../shared/types/index'
 // import revQuranT from '../../../server/api/quran'
-import { useHead, useI18n, useNuxtApp, useRoute, watch } from '#imports'
+import { definePageMeta, useHead, useI18n, useNuxtApp, useRoute, watch } from '#imports'
 import { VueScrollPicker } from 'vue-scroll-picker'
 import 'vue-scroll-picker/style.css'
 
@@ -23,16 +23,10 @@ export interface ONE_INTERFACE {
 }
 const { t } = useI18n()
 
-useHead({
-  title: appName,
-  appDescription,
-  ogTitle: appName,
-  ogDescription: appDescription,
-})
 const route = useRoute()
 const lok: Ref<number> = ref(1)
 const bookmarks: Ref<string[]> = ref([])
-//const anchor = ref('')
+// const anchor = ref('')
 const router = useRouter({
   scrollBehavior(to: any, _from: string) {
     if (to.hash) {
@@ -40,14 +34,15 @@ const router = useRouter({
     }
   },
 })
-const Quran: ONE_INTERFACE[] = nuxtApp.payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ'];
+const Quran: ONE_INTERFACE[] = nuxtApp.payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
 const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
-//const Verses = computed(() => sura.value.ayat)
+// const Verses = computed(() => sura.value.ayat)
 const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
   ({
     name: `${Single.id}-${Single.name}`,
     value: Single.id,
   }))
+
 watchEffect(() => {
   lok.value = route.params.lok
 })
@@ -57,12 +52,21 @@ function saveBookmark(bm: number) {
 function navToHash(hash: string) {
   router.go(hash)
 }
+
 watch(
   lok,
   (current: number) => {
     router.replace({ params: { lok: current } })
   },
 )
+const PageName: Ref<string> = computed(() => sura.value.name as string)
+
+useHead({
+  title: `${appName}-${PageName.value}`,
+  appDescription,
+  ogTitle: appName,
+  ogDescription: appDescription,
+})
 </script>
 
 <template>

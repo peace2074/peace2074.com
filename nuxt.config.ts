@@ -70,7 +70,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-03-05',
   nitro: {
     rollupConfig: {
-      external: ['resolve'],
+      external: ['resolve', 'vue-scroll-picker'],
     },
     esbuild: {
       options: {
@@ -79,7 +79,7 @@ export default defineNuxtConfig({
     },
     prerender: {
       crawlLinks: true,
-      routes: ['/'],
+      routes: ['/', 'quran', 'holyames', 'miracles'],
       ignore: ['/hi'],
     },
     imports: {
@@ -106,7 +106,7 @@ export default defineNuxtConfig({
   },
   i18n: {
     baseUrl: 'https://peace2074.com',
-    defaultLocale: 'en',
+    defaultLocale: 'ar',
     vueI18nLoader: true,
     vueI18n: '../i18n.config',
   },

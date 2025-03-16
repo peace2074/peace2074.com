@@ -1,25 +1,25 @@
-export type LocaleT = { code: string; name?: string; messages?: string[] };
+import { ar, en } from './app/locale'
+
+export interface LocaleT { code: string, name?: string, messages?: string[] }
 export type LocalesT = Locale[]
-import { en, ar } from "./app/locale";
-    
+
 export default defineI18nConfig(() => ({
-    legacy: false,
-    locale: 'en',
-    locales: [
-        {
-            code: 'en',
-            name: 'English',
-            messages: en
-        },
-        {
-            code: 'ar',
-            name: 'Arabic',
-            messages: ar
-        }
-    ],
-    messages: {
-        en,
-        ar,
-    }
+  legacy: false,
+  locale: 'ar',
+  locales: [
+    {
+      code: 'en',
+      name: 'English',
+      messages: en,
+    },
+    {
+      code: 'ar',
+      name: 'Arabic',
+      messages: ar,
+    },
+  ],
+  messages: {
+    en,
+    ar,
+  },
 }))
- 
