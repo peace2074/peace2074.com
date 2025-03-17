@@ -5,16 +5,16 @@ import { useHead, useI18n, useNuxtApp, useRoute, watch } from '#imports'
 import { VueScrollPicker } from 'vue-scroll-picker'
 import 'vue-scroll-picker/style.css'
 
-const nuxtApp = useNuxtApp()
+const nuxtApp = await useNuxtApp()
 const $q = useQuasar()
-
+const note = useNote()
 $q.fullscreen.request()
   .then(() => {
-    // success!
+    note.success()
   })
-  // .catch((err) => {
-  //   // oh, no!!!
-  // })
+  .catch((err) => {
+    note.error(err)
+  })
 
 // Exiting fullscreen mode:
 $q.fullscreen.exit()
