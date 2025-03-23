@@ -3,9 +3,24 @@ import type { LocalesT, LocaleT } from '~~/i18n.config'
 import { computed, ref, useI18n, useQuasar } from '#imports'
 
 const $q = useQuasar()
+const fullScreen = ref(false)
+
+function toggleFullScreen() {
+  if (!fullScreen.value) {
+    $q.fullscreen.request()
+      .then(() => {
+        note.success('sucess')
+      })
+  }
+  else {
+    $q.fullscreen.exit().then(() => {
+      note.warn('Exite')
+    })
+  }
+}
 const offset = ref([0, 18])
 const toggleLeftDrawer = ref(false)
-let { locale, availableLocales } = useI18n() as {
+const { locale, availableLocales } = useI18n() as {
   locale: LocaleT
   availableLocales: LocalesT
 }
@@ -38,7 +53,13 @@ function toggleDrawer() {
           <nuxt-link :title="appName" to="/">
             {{ appName }}
           </nuxt-link>
+          <q-space />
         </q-toolbar-title>
+        <q-btn
+          color="lemon-9"
+          :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+          @click="$q.fullscreen.toggle()"
+        />
         <q-btn dense flat round icon="light" @click="toggleDark" />
       </q-toolbar>
     </q-header>

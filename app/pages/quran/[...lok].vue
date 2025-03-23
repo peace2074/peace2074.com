@@ -8,22 +8,8 @@ import 'vue-scroll-picker/style.css'
 const nuxtApp = await useNuxtApp()
 const $q = useQuasar()
 const note = useNote()
-$q.fullscreen.request()
-  .then(() => {
-    note.success()
-  })
-  .catch((err) => {
-    note.error(err)
-  })
 
-// Exiting fullscreen mode:
-$q.fullscreen.exit()
-  .then(() => {
-    // success!
-  })
-  // .catch((err) => {
-  //   // oh, no!!!
-  // })
+
 export interface AYAT {
   chapter: number
   verse: number
@@ -43,7 +29,6 @@ const { t } = useI18n()
 const route = useRoute()
 const lok: Ref<number> = ref(1)
 const bookmarks: Ref<string[]> = ref([])
-// const anchor = ref('')
 const router = useRouter({
   scrollBehavior(to: any, _from: string) {
     if (to.hash) {
@@ -80,8 +65,8 @@ const PageName: Ref<string> = computed(() => sura.value.name as string)
 
 useHead({
   title: `${appName}-${PageName.value}`,
-  appDescription,
-  ogTitle: appName,
+  appDescription: PageName,
+  ogTitle: sura.value.name,
   ogDescription: appDescription,
 })
 </script>
@@ -92,29 +77,37 @@ useHead({
       <q-card class="text-md">
         <q-card-section class="pcs block">
           <VueScrollPicker v-model="lok" :options="options" />
-          <q-input v-model="lok" fab mini type="number" :max="114" :min="1" label="Sura" />
+          <q-input
+            v-model="lok"
+            fab
+            mini
+            type="number"
+            :max="114"
+            :min="1"
+            label="Sura"
+          />
         </q-card-section>
 
         <q-card-section class="rtl flex">
           <div>
             <h4 class="text-h3">
-              <span class="text-h6">{{ t('pages.quran.sura.name') }}</span>{{ sura.name }}
+              <span class="text-h6">{{ t("pages.quran.sura.name") }}</span>{{ sura.name }}
             </h4>
             <h5 class="text-h5">
-              <span class="text-h6">{{ t('pages.quran.sura.id') }}</span>:{{ sura.id }}
+              <span class="text-h6">{{ t("pages.quran.sura.id") }}</span>:{{ sura.id }}
             </h5>
           </div>
           <div>
             <h4 class="align-left text-h6">
-              {{ t('pages.quran.sura.totverses') }}:{{ sura.total_verses }}
+              {{ t("pages.quran.sura.totverses") }}:{{ sura.total_verses }}
             </h4>
             <h4 class="align-left text-h6">
-              {{ t('pages.quran.sura.location') }}:{{ sura.type }}
+              {{ t("pages.quran.sura.location") }}:{{ sura.type }}
             </h4>
           </div>
         </q-card-section>
         <q-card-section>
-          {{ t('pages.quran.sura.bookmark') }}
+          {{ t("pages.quran.sura.bookmark") }}
           <ol>
             <li v-for="b in bookmarks" :key="b" @click="navToHash(b)">
               {{ b }}
@@ -131,7 +124,11 @@ useHead({
             <i v-for="aya in sura.ayat" :key="aya.verse" class="q-mx-sm" :hash="aya.verse">{{ aya.text }}
               <q-chip class="bg-green text-white">{{ aya.verse }}</q-chip>
               <q-btn
-                dense fab-mini color="yellow" size="10" icon="bookmark"
+                dense
+                fab-mini
+                color="yellow"
+                size="10"
+                icon="bookmark"
                 @click="saveBookmark(aya.verse)"
               />
             </i>
