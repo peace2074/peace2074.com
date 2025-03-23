@@ -1,7 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { pwa } from './app/config/pwa'
 import { appDescription } from './app/constants/index'
-import defineI18nConfig from './i18n.config'
 import { QuasarOptions } from './qusarOptions'
 
 export default defineNuxtConfig({
