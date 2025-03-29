@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     'nuxt-gtag',
   ],
+  ssr: true,
   imports: {
     autoImport: true,
     dirs: [
@@ -57,7 +58,22 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: '',
   },
-
+  routeRules: {
+    '/api/quran': {
+      cache: {
+        maxAge: 31536000000,
+        swr: true,
+        name: 'quran',
+      },
+    },
+    '/api/holynames': {
+      cache: {
+        maxAge: 31536000000,
+        swr: true,
+        name: 'holynames',
+      },
+    },
+  },
   future: {
     compatibilityVersion: 4,
   },

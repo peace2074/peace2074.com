@@ -1,14 +1,11 @@
 <script lang="ts" async setup>
-// import type { QDBI } from '../../../shared/types/index'
-// import revQuranT from '../../../server/api/quran'
-import { useHead, useI18n, useNuxtApp, useRoute, watch } from '#imports'
+import { useHead, useI18n } from '#imports'
 import { VueScrollPicker } from 'vue-scroll-picker'
 import 'vue-scroll-picker/style.css'
 
-const nuxtApp = await useNuxtApp()
-const $q = useQuasar()
-const note = useNote()
+const appName = 'عبد السلام ٢٠٧٤'
 
+const q2p = useQ2P()
 
 export interface AYAT {
   chapter: number
@@ -25,7 +22,6 @@ export interface ONE_INTERFACE {
   ayat: AYAT[]
 }
 const { t } = useI18n()
-
 const route = useRoute()
 const lok: Ref<number> = ref(1)
 const bookmarks: Ref<string[]> = ref([])
@@ -36,15 +32,14 @@ const router = useRouter({
     }
   },
 })
-const Quran: ONE_INTERFACE[] = nuxtApp.payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
+const Quran: ONE_INTERFACE[] = q2p.GetQ
 const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
-// const Verses = computed(() => sura.value.ayat)
+const PageTite: Ref<strig> = computed(() => `${appName}-${sura.value.id}:${sura.value.name}`)
 const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
   ({
     name: `${Single.id}-${Single.name}`,
     value: Single.id,
   }))
-
 watchEffect(() => {
   lok.value = route.params.lok
 })
@@ -54,89 +49,88 @@ function saveBookmark(bm: number) {
 function navToHash(hash: string) {
   router.go(hash)
 }
-
 watch(
   lok,
   (current: number) => {
     router.replace({ params: { lok: current } })
   },
 )
-const PageName: Ref<string> = computed(() => sura.value.name as string)
-
 useHead({
-  title: `${appName}-${PageName.value}`,
-  appDescription: PageName,
-  ogTitle: sura.value.name,
+  title: PageTite,
+  appDescription: appName,
+  ogTitle: PageTite,
   ogDescription: appDescription,
 })
 </script>
 
 <template>
-  <q-page padding class="rtl">
-    <div class="q-gutter-md" column>
-      <q-card class="text-md">
-        <q-card-section class="pcs block">
-          <VueScrollPicker v-model="lok" :options="options" />
-          <q-input
-            v-model="lok"
-            fab
-            mini
-            type="number"
-            :max="114"
-            :min="1"
-            label="Sura"
-          />
-        </q-card-section>
+  <KeepAlive>
+    <q-page padding class="rtl">
+      <div class="q-gutter-md" column>
+        <q-card class="text-md">
+          <q-card-section class="pcs block">
+            <VueScrollPicker v-model="lok" :options="options" />
+            <q-input
+              v-model="lok"
+              fab
+              mini
+              type="number"
+              :max="114"
+              :min="1"
+              label="Sura"
+            />
+          </q-card-section>
 
-        <q-card-section class="rtl flex">
-          <div>
-            <h4 class="text-h3">
-              <span class="text-h6">{{ t("pages.quran.sura.name") }}</span>{{ sura.name }}
-            </h4>
-            <h5 class="text-h5">
-              <span class="text-h6">{{ t("pages.quran.sura.id") }}</span>:{{ sura.id }}
-            </h5>
-          </div>
-          <div>
-            <h4 class="align-left text-h6">
-              {{ t("pages.quran.sura.totverses") }}:{{ sura.total_verses }}
-            </h4>
-            <h4 class="align-left text-h6">
-              {{ t("pages.quran.sura.location") }}:{{ sura.type }}
-            </h4>
-          </div>
-        </q-card-section>
-        <q-card-section>
-          {{ t("pages.quran.sura.bookmark") }}
-          <ol>
-            <li v-for="b in bookmarks" :key="b" @click="navToHash(b)">
-              {{ b }}
-            </li>
-          </ol>
-        </q-card-section>
-      </q-card>
-      <q-card class="q-mt-xs">
-        <q-card-section>
-          <h3>{{ AlFateha }}</h3>
-        </q-card-section>
-        <q-card-section>
-          <span class="just fit verse block capitalize">
-            <i v-for="aya in sura.ayat" :key="aya.verse" class="q-mx-sm" :hash="aya.verse">{{ aya.text }}
-              <q-chip class="bg-green text-white">{{ aya.verse }}</q-chip>
-              <q-btn
-                dense
-                fab-mini
-                color="yellow"
-                size="10"
-                icon="bookmark"
-                @click="saveBookmark(aya.verse)"
-              />
-            </i>
-          </span>
-        </q-card-section>
-      </q-card>
-    </div>
-  </q-page>
+          <q-card-section class="rtl flex">
+            <div>
+              <h4 class="text-h3">
+                <span class="text-h6">{{ t("pages.quran.sura.name") }}</span>{{ sura.name }}
+              </h4>
+              <h5 class="text-h5">
+                <span class="text-h6">{{ t("pages.quran.sura.id") }}</span>:{{ sura.id }}
+              </h5>
+            </div>
+            <div>
+              <h4 class="align-left text-h6">
+                {{ t("pages.quran.sura.totverses") }}:{{ sura.total_verses }}
+              </h4>
+              <h4 class="align-left text-h6">
+                {{ t("pages.quran.sura.location") }}:{{ sura.type }}
+              </h4>
+            </div>
+          </q-card-section>
+          <q-card-section>
+            {{ t("pages.quran.sura.bookmark") }}
+            <ol>
+              <li v-for="b in bookmarks" :key="b" @click="navToHash(b)">
+                {{ b }}
+              </li>
+            </ol>
+          </q-card-section>
+        </q-card>
+        <q-card class="q-mt-xs">
+          <q-card-section>
+            <h3>{{ AlFateha }}</h3>
+          </q-card-section>
+          <q-card-section>
+            <span class="just fit verse block capitalize">
+              <i v-for="aya in sura.ayat" :key="aya.verse" class="q-mx-sm" :hash="aya.verse">{{ aya.text }}
+                <q-chip class="bg-green text-white">{{ aya.verse }}</q-chip>
+                <q-btn
+                  dense
+                  fab-mini
+                  color="yellow"
+                  size="10"
+                  icon="bookmark"
+                  @click="saveBookmark(aya.verse)"
+                />
+              </i>
+            </span>
+          </q-card-section>
+        </q-card>
+      </div>
+    </q-page>
+  </KeepAlive>
 </template>
 
 <style lang="scss">
