@@ -1,6 +1,6 @@
 import { Dialog, Notify } from 'quasar'
 
-import { NoteAcionsE } from '../../shared/types'
+import { NoteAcionsE } from '~~/shared/types'
 import {
   defaultStyles,
 } from '../constants'
