@@ -85,7 +85,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-03-05',
   nitro: {
     rollupConfig: {
-      external: ['resolve', 'vue-scroll-picker'],
+      external: ['resolve', 'vue-scroll-picker', '@quasar/extras'],
     },
     esbuild: {
       options: {
