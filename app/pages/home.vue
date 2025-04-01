@@ -14,7 +14,6 @@ note.success('On')
 
 <template>
   <q-page padding class="index-page">
-    <Logos mb-6 />
     <ClientOnly>
       <Suspense>
         <div v-if="online">
@@ -30,15 +29,16 @@ note.success('On')
             :title="t('pages.quran.holynames')"
             to="/holynames"
           >
-            {{ $t("pages.holynames") }}
+            {{ t("pages.holynames") }}
           </NuxtLink>
           <NuxtLink
             class="q-mt-xl text-h5 block"
             :title="t('pages.miracles.pageTitle')"
             to="/miracles"
           >
-            {{ $t("pages.miracles.pageTitle") }}
+            {{ t("pages.miracles.pageTitle") }}
           </NuxtLink>
+          <q-btn color="green-9" icon="reset" class="q-mx-md" :label="t('button.home')" to="/" />
           <PageView class="q-mt-xl" />
         </div>
         <div v-else text-gray:80>

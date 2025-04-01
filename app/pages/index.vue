@@ -22,13 +22,13 @@ note.success('On')
   <q-page padding class="index-page">
     <Logos mb-6 />
     <div v-if="online">
-      <NuxtLink
+      <nuxt-link
         v-for="availableLocale in availableLocales"
         :key="availableLocale.code"
         :to="switchLocalePath(locales.value[1].code)"
       >
-        {{ locale.name }}
-      </NuxtLink>
+        {{ locale }}
+      </nuxt-link>
       <hr>
       <q-btn color="primary" icon="home" :label="t('button.home')" to="/home" />
       <q-btn color="primary" icon="en" label="English" @click="setLocale('en')" />

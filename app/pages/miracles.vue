@@ -1,17 +1,14 @@
 <script lang="ts" setup>
 import type { ONE_INTERFACE } from './quran/[...lok].vue'
-import { useQ2P } from '../store/q2p.pinia'
-
-const q2p = useQ2P()
 
 const quran: ONE_INTERFACE[] = useNuxtApp().payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
 
 const { t } = useI18n()
-const CountOfAyat = qura.map((one: ONE_INTERFACE) => ({
+const CountOfAyat = quran.map((one: ONE_INTERFACE) => ({
   id: one,
   ayat: one.ayat.map(t => (
     {
-      [`${one.id}:${t.verse}`]: t.text.split(' ').map((a, i) => `${i + 1}-${a}`),
+      [`${one.id}:${t.verse}`]: t.text.split(' ').map((a, i) => ({ word: `${i + 1}-${a}` })),
 
     }),
   ),
@@ -21,7 +18,7 @@ const CountOfAyat = qura.map((one: ONE_INTERFACE) => ({
 <template>
   <ClientOnly>
     <Suspense>
-      <q-page v-if="quran" padding class="fit flex bg-white">
+      <q-page v-if="!!quran" padding class="fit flex bg-white">
         <h1>{{ t('pages.miracles.pageTitle') }}</h1>
         <q-cart>
           <q-card-section>
