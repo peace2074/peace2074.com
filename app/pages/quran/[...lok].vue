@@ -5,9 +5,7 @@ import 'vue-scroll-picker/style.css'
 
 const appName = 'عبد السلام ٢٠٧٤'
 
-const q2p = useQ2P()
-
-useNuxtApp().payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
+// const q2p = useQ2P()
 
 export interface AYAT {
   chapter: number
@@ -34,7 +32,7 @@ const router = useRouter({
     }
   },
 })
-const Quran: ONE_INTERFACE[] = q2p.GetQ && useNuxtApp().payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
+const Quran: ONE_INTERFACE[] = useNuxtApp().payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
 
 const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
 const PageTite: Ref<strig> = computed(() => `${appName}-${sura.value.id}:${sura.value.name}`)
