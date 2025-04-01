@@ -16,10 +16,9 @@ export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
 
     if (data && data.value) {
       const readyData = data.value
+      useState('Book', () => readyData)
+      nuxtApp.provide('Book', readyData)
       q2p.setQuran(readyData)
-      useState('quran', () => readyData)
-      nuxtApp.provide('quran', readyData)
     }
-    // clear()
   }
 })

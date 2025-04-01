@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { ONE_INTERFACE } from './quran/[...lok].vue'
 
-const quran: ONE_INTERFACE[] = useNuxtApp().payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
-
+const { $Book } =  useNuxtApp()
+const quran: ONE_INTERFACE[] = $Book
 const { t } = useI18n()
 const CountOfAyat = quran.map((one: ONE_INTERFACE) => ({
   id: one,

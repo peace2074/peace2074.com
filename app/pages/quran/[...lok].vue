@@ -3,9 +3,7 @@ import { useHead, useI18n } from '#imports'
 import { VueScrollPicker } from 'vue-scroll-picker'
 import 'vue-scroll-picker/style.css'
 
-const appName = 'عبد السلام ٢٠٧٤'
-
-// const q2p = useQ2P()
+const { $Book } = useNuxtApp()
 
 export interface AYAT {
   chapter: number
@@ -22,6 +20,7 @@ export interface ONE_INTERFACE {
   ayat: AYAT[]
 }
 const { t } = useI18n()
+const appName = t('general.SiteTitle')
 const route = useRoute()
 const lok: Ref<number> = ref(1)
 const bookmarks: Ref<string[]> = ref([])
@@ -32,7 +31,7 @@ const router = useRouter({
     }
   },
 })
-const Quran: ONE_INTERFACE[] = useNuxtApp().payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
+const Quran: ONE_INTERFACE[] = $Book
 
 const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
 const PageTite: Ref<strig> = computed(() => `${appName}-${sura.value.id}:${sura.value.name}`)
