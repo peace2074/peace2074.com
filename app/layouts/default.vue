@@ -1,42 +1,15 @@
 <script lang="ts" setup>
-import type { LocalesT, LocaleT } from '~~/i18n.config'
-import { computed, ref, useI18n, useQuasar } from '#imports'
+import { ref, useQuasar } from '#imports'
 
 const $q = useQuasar()
-const fullScreen = ref(false)
+const { t } = useI18n()
 
-function toggleFullScreen() {
-  if (!fullScreen.value) {
-    $q.fullscreen.request()
-      .then(() => {
-        note.success('sucess')
-      })
-  }
-  else {
-    $q.fullscreen.exit().then(() => {
-      note.warn('Exite')
-    })
-  }
-}
-const offset = ref([0, 18])
 const toggleLeftDrawer = ref(false)
-const { locale, availableLocales } = useI18n() as {
-  locale: LocaleT
-  availableLocales: LocalesT
-}
-const switchLocalePath = useSwitchLocalePath()
-
-const filteredLocales = computed(() => {
-  return availableLocales.filter((i: { code: string }) => i.code !== locale.code)
-})
 
 const { toggle } = $q.dark
 function toggleDark() {
   toggle()
   return $q.dark.mode
-}
-function toggleLang() {
-  switchLocalePath(locale.code)
 }
 
 function toggleDrawer() {
@@ -50,9 +23,10 @@ function toggleDrawer() {
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleDrawer" />
         <q-toolbar-title>
-          <nuxt-link :title="appName" to="/">
-            {{ appName }}
+          <nuxt-link :title="t('general.SiteTitle')" to="/">
+            {{ t('general.SiteTitle') }}
           </nuxt-link>
+
           <q-space />
         </q-toolbar-title>
         <q-btn

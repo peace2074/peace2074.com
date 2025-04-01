@@ -7,7 +7,7 @@ const q2p = useQ2P()
 const quran: Ref<ONE_INTERFACE[]> = q2p.GetQ
 
 const { t } = useI18n()
-const CountOfAyat = quran && q2p.GetQ.map((one: ONE_INTERFACE) => ({
+const CountOfAyat = quran || q2p.GetQ.map((one: ONE_INTERFACE) => ({
   id: one,
   ayat: one.ayat.map(t => (
     {
@@ -29,7 +29,7 @@ const CountOfAyat = quran && q2p.GetQ.map((one: ONE_INTERFACE) => ({
           </q-card-section>
         </q-cart>
       </q-page>
-      <q-Skeleton v-else />
+      <q-Skeleton v-else class="fit" />
     </Suspense>
   </ClientOnly>
 </template>

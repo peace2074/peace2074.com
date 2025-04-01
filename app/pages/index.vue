@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { definePageMeta, useOnline } from '#imports'
 
+const { locale, locales, setLocale } = useI18n()
+const switchLocalePath = useSwitchLocalePath()
+
+const availableLocales = computed(() => {
+  return locales.value.filter(i => i.code !== locale.value)
+})
 const { t } = useI18n()
 const { note } = useNote()
 
@@ -15,48 +21,29 @@ note.success('On')
 <template>
   <q-page padding class="index-page">
     <Logos mb-6 />
-    <ClientOnly>
-      <Suspense>
-        <div v-if="online">
-          <NuxtLink
-            class="q-mt-xl text-h5 block"
-            :title="t('pages.quran.pageTitle')"
-            to="/quran/1"
-          >
-            {{ t("pages.quran.pageTitle") }}
-          </NuxtLink>
-          <NuxtLink
-            class="q-mt-xl text-h5 block"
-            :title="t('pages.quran.holynames')"
-            to="/holynames"
-          >
-            {{ $t("pages.holynames") }}
-          </NuxtLink>
-          <NuxtLink
-            class="q-mt-xl text-h5 block"
-            :title="t('pages.miracles.pageTitle')"
-            to="/miracles"
-          >
-            {{ $t("pages.miracles.pageTitle") }}
-          </NuxtLink>
-          <PageView class="q-mt-xl" />
-        </div>
-        <div v-else text-gray:80>
-          You're offline
-        </div>
-        <template #fallback>
-          <div italic op50>
-            <span animate-pulse>Loading...</span>
-            <q-skeleton animation="true" bordered />
-          </div>
-        </template>
-      </Suspense>
-      <template #fallback>
-        <div op50>
-          <span animate-pulse>...</span>
-        </div>
-      </template>
-    </ClientOnly>
+    <div v-if="online">
+      <NuxtLink
+        v-for="availableLocale in availableLocales"
+        :key="availableLocale.code"
+        :to="switchLocalePath(locales.value[1].code)"
+      >
+        {{ locale.name }}
+      </NuxtLink>
+      <hr>
+      <q-btn color="primary" icon="home" :label="t('button.home')" to="/home" />
+      <q-btn color="primary" icon="en" label="English" @click="setLocale('en')" />
+      <q-btn color="primary" icon="en" label="Arabic" @click="setLocale('ar')" />
+      <PageView class="q-mt-xl" />
+    </div>
+    <div v-else text-gray:80>
+      You're offline
+    </div>
+    <template #fallback>
+      <div italic op50>
+        <span animate-pulse>Loading...</span>
+        <q-skeleton :animation="true" class="fit" bordered />
+      </div>
+    </template>
   </q-page>
 </template>
 

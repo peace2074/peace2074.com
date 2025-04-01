@@ -7,6 +7,8 @@ const appName = 'عبد السلام ٢٠٧٤'
 
 const q2p = useQ2P()
 
+useNuxtApp().payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
+
 export interface AYAT {
   chapter: number
   verse: number
@@ -32,7 +34,8 @@ const router = useRouter({
     }
   },
 })
-const Quran: ONE_INTERFACE[] = q2p.GetQ
+const Quran: ONE_INTERFACE[] = q2p.GetQ.length ? q2p.GetQ : useNuxtApp().payload.data['TbCCBUHxHmfsW9be2MugfVkp6cghANor-sXUufOWNbQ']
+
 const sura: Ref<ONE_INTERFACE> = computed(() => Quran[lok.value - 1])
 const PageTite: Ref<strig> = computed(() => `${appName}-${sura.value.id}:${sura.value.name}`)
 const options = Object.values(Quran).map((Single: ONE_INTERFACE) =>
@@ -101,11 +104,11 @@ useHead({
           </q-card-section>
           <q-card-section>
             {{ t("pages.quran.sura.bookmark") }}
-            <ol>
-              <li v-for="b in bookmarks" :key="b" @click="navToHash(b)">
+            <div>
+              <span v-for="b in bookmarks" :key="b" @click="navToHash(b)">
                 {{ b }}
-              </li>
-            </ol>
+              </span>
+            </div>
           </q-card-section>
         </q-card>
         <q-card class="q-mt-xs">
@@ -113,7 +116,7 @@ useHead({
             <h3>{{ AlFateha }}</h3>
           </q-card-section>
           <q-card-section>
-            <span class="just fit verse block capitalize">
+            <div class="just fit verse block capitalize">
               <i v-for="aya in sura.ayat" :key="aya.verse" class="q-mx-sm" :hash="aya.verse">{{ aya.text }}
                 <q-chip class="bg-green text-white">{{ aya.verse }}</q-chip>
                 <q-btn
@@ -125,7 +128,8 @@ useHead({
                   @click="saveBookmark(aya.verse)"
                 />
               </i>
-            </span>
+              <q-space />
+            </div>
           </q-card-section>
         </q-card>
       </div>
