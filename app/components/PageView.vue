@@ -1,7 +1,12 @@
 <script setup lang="ts">
-const { data } = await useFetch('/api/pageview')
+import { useTimeAgo } from '@vueuse/core'
+import moment from 'moment'
 
-const time = useTimeAgo(() => data.value?.startAt || 0)
+const { data } = await useFetch('/api/pageview')
+const time = useTimeAgo(() => data.value?.startAt)
+const date = __DATE__
+const timeAgo = useTimeAgo(date)
+const BuildTime: string = moment(date).format('ddd MMM DD, YYYY [at] HH:mm')
 </script>
 
 <template>
@@ -9,5 +14,8 @@ const time = useTimeAgo(() => data.value?.startAt || 0)
     <span text-gray font-500>{{ data?.pageview }}</span>
     page views since
     <span text-gray>{{ time }}</span>
+    <div class="q-mx-auto">
+      Built at: {{ BuildTime }} ({{ timeAgo }})
+    </div>
   </div>
 </template>

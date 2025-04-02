@@ -1,7 +1,5 @@
 <script lang="ts" async setup>
 import { useHead, useI18n } from '#imports'
-import { VueScrollPicker } from 'vue-scroll-picker'
-import 'vue-scroll-picker/style.css'
 
 const { $Book } = useNuxtApp()
 
@@ -134,9 +132,7 @@ useHead({
   </KeepAlive>
 </template>
 
-<style lang="scss">
-@import 'vue-scroll-picker/style.css';
-
+<style lang="scss" scoped>
 .just {
   text-align: justify;
   letter-spacing: 1px;
