@@ -2,6 +2,8 @@
 import { useTimeAgo } from '@vueuse/core'
 import moment from 'moment'
 
+const d = new Date()
+
 const { data } = await useFetch('/api/pageview')
 const time = useTimeAgo(() => data.value?.startAt)
 const date = __DATE__
