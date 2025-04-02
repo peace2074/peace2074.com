@@ -110,7 +110,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       replace({
-        __DATE__: JSON.stringify(new Date().toISOString()),
+        __DATE__: new Date().toISOString(),
         preventAssignment: true,
       }),
     ],
