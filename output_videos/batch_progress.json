@@ -79,44 +79,51 @@
   "12": {
     "surahId": 12,
     "surahName": "Yusuf",
-    "status": "generated",
-    "videoPath": "output_videos/surah_012_yusuf.mp4"
+    "status": "uploaded",
+    "videoPath": "output_videos/surah_012_yusuf.mp4",
+    "youtubeVideoId": "i3bdC56pCHc"
   },
   "13": {
     "surahId": 13,
     "surahName": "Ar-Ra'd",
-    "status": "generated",
-    "videoPath": "output_videos/surah_013_ar_ra_d.mp4"
+    "status": "uploaded",
+    "videoPath": "output_videos/surah_013_ar_ra_d.mp4",
+    "youtubeVideoId": "TASQxP7jZGo"
   },
   "14": {
     "surahId": 14,
     "surahName": "Ibrahim",
-    "status": "generated",
-    "videoPath": "output_videos/surah_014_ibrahim.mp4"
+    "status": "uploaded",
+    "videoPath": "output_videos/surah_014_ibrahim.mp4",
+    "youtubeVideoId": "fAVWQWHFjMw"
   },
   "15": {
     "surahId": 15,
     "surahName": "Al-Hijr",
-    "status": "generated",
-    "videoPath": "output_videos/surah_015_al_hijr.mp4"
+    "status": "uploaded",
+    "videoPath": "output_videos/surah_015_al_hijr.mp4",
+    "youtubeVideoId": "nAAfgJDWcgw"
   },
   "16": {
     "surahId": 16,
     "surahName": "An-Nahl",
-    "status": "generated",
-    "videoPath": "output_videos/surah_016_an_nahl.mp4"
+    "status": "uploaded",
+    "videoPath": "output_videos/surah_016_an_nahl.mp4",
+    "youtubeVideoId": "K9i3PZe3GwE"
   },
   "17": {
     "surahId": 17,
     "surahName": "Al-Isra",
-    "status": "generated",
-    "videoPath": "output_videos/surah_017_al_isra.mp4"
+    "status": "uploaded",
+    "videoPath": "output_videos/surah_017_al_isra.mp4",
+    "youtubeVideoId": "fPJ6ZN7-y-c"
   },
   "18": {
     "surahId": 18,
     "surahName": "Al-Kahf",
-    "status": "generated",
-    "videoPath": "output_videos/surah_018_al_kahf.mp4"
+    "status": "uploaded",
+    "videoPath": "output_videos/surah_018_al_kahf.mp4",
+    "youtubeVideoId": "1NsXDloW9OY"
   },
   "19": {
     "surahId": 19,

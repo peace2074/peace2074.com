@@ -1,9 +1,75 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { execSync } from 'node:child_process'
+import https from 'node:https'
+import http from 'node:http'
+import dns from 'node:dns'
 import dotenv from 'dotenv'
 
 dotenv.config()
+dns.setDefaultResultOrder('ipv4first')
+
+interface HttpRequestOptions {
+  method?: string
+  headers?: Record<string, string>
+  body?: string | Buffer | fs.ReadStream
+}
+
+interface HttpResponse {
+  status: number
+  headers: http.IncomingHttpHeaders
+  text: () => Promise<string>
+  json: <T = any>() => Promise<T>
+  ok: boolean
+}
+
+function httpRequest(urlStr: string, options: HttpRequestOptions = {}): Promise<HttpResponse> {
+  return new Promise((resolve, reject) => {
+    const url = new URL(urlStr)
+    const isHttps = url.protocol === 'https:'
+    const client = isHttps ? https : http
+
+    const reqOptions: https.RequestOptions = {
+      hostname: url.hostname,
+      port: url.port || (isHttps ? 443 : 80),
+      path: url.pathname + url.search,
+      method: options.method || 'GET',
+      headers: options.headers || {},
+      family: 4,
+    }
+
+    const req = client.request(reqOptions, (res) => {
+      const chunks: Buffer[] = []
+      res.on('data', (chunk) => chunks.push(chunk))
+      res.on('end', () => {
+        const bodyBuffer = Buffer.concat(chunks)
+        const textStr = bodyBuffer.toString('utf8')
+        resolve({
+          status: res.statusCode || 0,
+          ok: (res.statusCode || 0) >= 200 && (res.statusCode || 0) < 300,
+          headers: res.headers,
+          text: async () => textStr,
+          json: async () => (textStr ? JSON.parse(textStr) : {}),
+        })
+      })
+    })
+
+    req.on('error', reject)
+
+    if (options.body) {
+      if (typeof options.body === 'string' || Buffer.isBuffer(options.body)) {
+        req.write(options.body)
+        req.end()
+      } else if (typeof (options.body as any).pipe === 'function') {
+        ;(options.body as fs.ReadStream).pipe(req)
+      } else {
+        req.end()
+      }
+    } else {
+      req.end()
+    }
+  })
+}
 
 interface Chapter {
   id: number
@@ -499,7 +565,7 @@ async function getOrCreatePlaylist(oauthToken: string): Promise<string | null> {
 
   try {
     // 1. Search existing playlists
-    const listRes = await fetch('https://www.googleapis.com/youtube/v3/playlists?mine=true&part=snippet&maxResults=50', {
+    const listRes = await httpRequest('https://www.googleapis.com/youtube/v3/playlists?mine=true&part=snippet&maxResults=50', {
       headers: { Authorization: `Bearer ${oauthToken}` },
     })
     if (listRes.ok) {
@@ -511,7 +577,7 @@ async function getOrCreatePlaylist(oauthToken: string): Promise<string | null> {
     }
 
     // 2. Create playlist if not found
-    const createRes = await fetch('https://www.googleapis.com/youtube/v3/playlists?part=snippet,status', {
+    const createRes = await httpRequest('https://www.googleapis.com/youtube/v3/playlists?part=snippet,status', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${oauthToken}`,
@@ -535,7 +601,7 @@ async function getOrCreatePlaylist(oauthToken: string): Promise<string | null> {
 
 async function addVideoToPlaylist(videoId: string, playlistId: string, oauthToken: string) {
   try {
-    await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet', {
+    await httpRequest('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${oauthToken}`,
@@ -557,22 +623,27 @@ async function addVideoToPlaylist(videoId: string, playlistId: string, oauthToke
   }
 }
 
-async function getOrRefreshOAuthToken(currentToken?: string): Promise<string | undefined> {
+async function getOrRefreshOAuthToken(): Promise<string | undefined> {
   const refreshToken = process.env.YOUTUBE_REFRESH_TOKEN
   const clientId = process.env.NITRO_GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID
   const clientSecret = process.env.NITRO_GOOGLE_CLIENT_SECRET || process.env.GOOGLE_CLIENT_SECRET
 
   if (refreshToken && clientId && clientSecret) {
     try {
-      const res = await fetch('https://oauth2.googleapis.com/token', {
+      const postData = new URLSearchParams({
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+        client_id: clientId,
+        client_secret: clientSecret,
+      }).toString()
+
+      const res = await httpRequest('https://oauth2.googleapis.com/token', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          grant_type: 'refresh_token',
-          refresh_token: refreshToken,
-          client_id: clientId,
-          client_secret: clientSecret,
-        }),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': String(Buffer.byteLength(postData)),
+        },
+        body: postData,
       })
       if (res.ok) {
         const data = await res.json()
@@ -580,16 +651,19 @@ async function getOrRefreshOAuthToken(currentToken?: string): Promise<string | u
           process.env.YOUTUBE_OAUTH_TOKEN = data.access_token
           return data.access_token
         }
+      } else {
+        const errText = await res.text()
+        console.warn(`[YouTube Token Refresh Failed ${res.status}]`, errText)
       }
     } catch (err: any) {
       console.warn('[YouTube Token Refresh Error]', err?.message || err)
     }
   }
-  return currentToken || process.env.YOUTUBE_OAUTH_TOKEN
+  return process.env.YOUTUBE_OAUTH_TOKEN
 }
 
 async function uploadToYouTube(chapter: Chapter, videoPath: string, rawOauthToken?: string): Promise<string | null> {
-  const oauthToken = await getOrRefreshOAuthToken(rawOauthToken)
+  const oauthToken = rawOauthToken || (await getOrRefreshOAuthToken())
   if (!oauthToken) {
     console.log(`[Surah ${chapter.id}/${114}] Video generated at ${videoPath} (Skipping direct YouTube upload: No YOUTUBE_OAUTH_TOKEN provided)`)
     return null
@@ -628,7 +702,7 @@ async function uploadToYouTube(chapter: Chapter, videoPath: string, rawOauthToke
     const fileSize = stats.size
 
     // 1. Resumable Upload Session Init
-    const initRes = await fetch(
+    const initRes = await httpRequest(
       'https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status',
       {
         method: 'POST',
@@ -659,20 +733,18 @@ async function uploadToYouTube(chapter: Chapter, videoPath: string, rawOauthToke
       return null
     }
 
-    const uploadUrl = initRes.headers.get('location')
+    const uploadUrl = (initRes.headers['location'] || initRes.headers['Location']) as string
     if (!uploadUrl) return null
 
     // 2. Binary Video Data Upload Stream
     const videoStream = fs.createReadStream(videoPath)
-    const uploadRes = await fetch(uploadUrl, {
+    const uploadRes = await httpRequest(uploadUrl, {
       method: 'PUT',
       headers: {
         'Content-Type': 'video/mp4',
         'Content-Length': String(fileSize),
       },
-      // @ts-ignore Node fetch supports stream body with duplex
       body: videoStream,
-      duplex: 'half',
     })
 
     if (uploadRes.ok) {
@@ -739,8 +811,9 @@ async function main() {
       rec.status = 'generated'
       saveProgress(progress)
 
-      if (oauthToken) {
-        const ytVideoId = await uploadToYouTube(chapter, videoPath, oauthToken)
+      const token = await getOrRefreshOAuthToken()
+      if (token) {
+        const ytVideoId = await uploadToYouTube(chapter, videoPath, token)
         if (ytVideoId) {
           rec.youtubeVideoId = ytVideoId
           rec.status = 'uploaded'

@@ -9,7 +9,7 @@ echo "============================" >> "$LOG_FILE"
 echo "Auto-upload started: $(date)" >> "$LOG_FILE"
 echo "============================" >> "$LOG_FILE"
 
-node --experimental-strip-types scripts/batch-generate-114-surah-videos.ts 2 114 >> "$LOG_FILE" 2>&1
+node --experimental-strip-types scripts/batch-generate-114-surah-videos.ts 1 114 >> "$LOG_FILE" 2>&1
 
 echo "" >> "$LOG_FILE"
 echo "Auto-upload finished: $(date)" >> "$LOG_FILE"
